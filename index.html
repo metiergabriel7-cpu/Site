@@ -1,1 +1,1359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS ADMIN — Roblox Control Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070a10;--bg2:#0d1117;--bg3:#111820;--panel:#0f1923;--border:#1a2840;--accent:#00d4ff;--accent2:#ff3e6c;--accent3:#00ff9d;--accent4:#ffb800;--text:#c8d8e8;--text2:#5a7a9a;--red:#ff3e6c;--green:#00ff9d;--yellow:#ffb800;--blue:#00d4ff;--purple:#a855f7;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:9998;}
+body::after{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-image:linear-gradient(rgba(0,212,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
 
+/* ======= LOGIN ======= */
+#login-page{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:opacity .6s ease,transform .6s ease;}
+#login-page.closing{opacity:0;transform:scale(1.04);pointer-events:none;}
+.login-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,212,255,0.04) 0%,transparent 70%);}
+.particles{position:absolute;inset:0;overflow:hidden;}
+.particle{position:absolute;width:2px;height:2px;background:var(--accent);border-radius:50%;animation:pfloat linear infinite;opacity:0;}
+@keyframes pfloat{0%{opacity:0;transform:translateY(100vh)}10%{opacity:.6}90%{opacity:.2}100%{opacity:0;transform:translateY(-10vh)}}
+.login-box{position:relative;z-index:1;width:480px;max-width:95vw;background:rgba(13,17,23,.97);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 0 80px rgba(0,212,255,.08),0 40px 80px rgba(0,0,0,.6);}
+.login-topbar{height:3px;background:linear-gradient(90deg,transparent,var(--accent),var(--purple),var(--accent2),transparent);animation:scan 3s linear infinite;background-size:200% 100%;}
+@keyframes scan{0%{background-position:-100% 0}100%{background-position:200% 0}}
+.login-header{padding:28px 40px 20px;text-align:center;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2);}
+.login-ring{width:68px;height:68px;margin:0 auto 18px;position:relative;display:flex;align-items:center;justify-content:center;}
+.login-ring::before{content:'';position:absolute;inset:0;border:2px solid transparent;border-top-color:var(--accent);border-right-color:rgba(0,212,255,.3);border-radius:50%;animation:spin 2s linear infinite;}
+.login-ring::after{content:'';position:absolute;inset:8px;border:1px solid rgba(0,212,255,.2);border-radius:50%;border-bottom-color:var(--purple);animation:spin 3s linear infinite reverse;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.login-title{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--accent);text-shadow:0 0 30px rgba(0,212,255,.5);letter-spacing:4px;margin-bottom:6px;}
+.login-title span{color:var(--accent2);}
+.login-sub{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);letter-spacing:3px;}
+.login-body{padding:24px 40px 28px;}
+
+/* Game preview card */
+#game-preview{display:none;background:linear-gradient(135deg,rgba(0,212,255,.06),rgba(168,85,247,.06));border:1px solid rgba(0,212,255,.2);border-radius:12px;padding:14px;margin-bottom:20px;animation:fadeSlide .4s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.game-preview-inner{display:flex;align-items:center;gap:12px;}
+.game-thumb{width:60px;height:60px;border-radius:8px;object-fit:cover;border:1px solid rgba(0,212,255,.2);background:var(--bg);flex-shrink:0;}
+.game-thumb-placeholder{width:60px;height:60px;border-radius:8px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.game-info{flex:1;min-width:0;}
+.game-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.game-id-disp{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);margin-top:2px;}
+.game-stats-row{display:flex;gap:12px;margin-top:6px;}
+.game-stat{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);}
+.game-stat span{color:var(--green);}
+
+/* Creator section */
+#creator-section{display:none;background:rgba(168,85,247,.05);border:1px solid rgba(168,85,247,.15);border-radius:12px;padding:14px;margin-bottom:20px;animation:fadeSlide .4s ease .1s both;}
+.creator-inner{display:flex;align-items:center;gap:12px;}
+.creator-avatar{width:44px;height:44px;border-radius:50%;border:2px solid rgba(168,85,247,.4);object-fit:cover;flex-shrink:0;background:var(--bg);}
+.creator-avatar-placeholder{width:44px;height:44px;border-radius:50%;background:rgba(168,85,247,.15);border:2px solid rgba(168,85,247,.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.creator-info{}
+.creator-label{font-size:10px;color:var(--text2);font-family:'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase;}
+.creator-name{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--purple);margin-top:2px;}
+.creator-id{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);}
+.verified-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:2px 8px;font-size:10px;color:var(--accent);font-family:'Share Tech Mono',monospace;margin-top:4px;}
+
+/* Loading state */
+#lookup-loading{display:none;text-align:center;padding:12px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);margin-bottom:16px;}
+.loading-dots::after{content:'...';animation:dots 1.2s steps(4,end) infinite;}
+@keyframes dots{0%,20%{content:'.'}40%{content:'..'}60%,100%{content:'...'}}
+
+.roblox-info{display:flex;align-items:center;gap:10px;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.12);border-radius:10px;padding:12px 16px;margin-bottom:22px;}
+.roblox-info-text{font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace;line-height:1.6;}
+.roblox-info-text strong{color:var(--accent);display:block;font-size:12px;}
+.form-group{margin-bottom:16px;}
+.form-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:2.5px;margin-bottom:9px;display:flex;align-items:center;gap:7px;font-family:'Share Tech Mono',monospace;}
+.label-dot{width:5px;height:5px;background:var(--accent);border-radius:50%;box-shadow:0 0 6px var(--accent);}
+.label-dot.purple{background:var(--purple);box-shadow:0 0 6px var(--purple);}
+.input-wrap{position:relative;}
+.input-wrap input{width:100%;background:rgba(7,10,16,.8);border:1px solid var(--border);border-radius:10px;padding:13px 44px 13px 16px;color:var(--text);font-size:14px;font-family:'Share Tech Mono',monospace;outline:none;transition:all .25s;letter-spacing:1px;}
+.input-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,255,.1);}
+.input-wrap input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,62,108,.1);animation:shake .4s;}
+.input-wrap input.success{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,255,157,.1);}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.input-wrap input::placeholder{color:var(--text2);opacity:.5;}
+.istat{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:15px;opacity:0;transition:opacity .3s;}
+.istat.show{opacity:1;}
+.field-hint{font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace;margin-top:6px;opacity:.6;}
+.divider{display:flex;align-items:center;gap:12px;margin:4px 0 18px;}
+.div-line{flex:1;height:1px;background:var(--border);}
+.div-text{font-size:10px;color:var(--text2);font-family:'Share Tech Mono',monospace;letter-spacing:2px;}
+.error-box{background:rgba(255,62,108,.08);border:1px solid rgba(255,62,108,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);font-family:'Share Tech Mono',monospace;margin-bottom:16px;display:none;align-items:center;gap:8px;}
+.error-box.show{display:flex;}
+.login-btn{width:100%;background:linear-gradient(135deg,var(--accent),#0099cc);color:var(--bg);border:none;border-radius:10px;padding:14px;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(0,212,255,.25);}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(0,212,255,.4);}
+.login-btn:disabled{opacity:.7;cursor:not-allowed;transform:none;}
+.login-footer{padding:14px 40px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.15);}
+.footer-sec{font-size:10px;color:var(--text2);font-family:'Share Tech Mono',monospace;}
+.footer-ver{font-size:10px;color:rgba(90,122,154,.4);font-family:'Share Tech Mono',monospace;}
+
+/* ======= ADMIN PANEL ======= */
+#admin-panel{display:none;opacity:0;transition:opacity .5s;}
+#admin-panel.visible{display:block;}
+#admin-panel.fadein{opacity:1;}
+
+.topbar{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(7,10,16,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:1000;backdrop-filter:blur(10px);}
+.topbar-logo{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--accent);text-shadow:0 0 20px var(--accent);letter-spacing:3px;}
+.topbar-logo span{color:var(--accent2);}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.game-chip{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.15);padding:4px 10px;border-radius:6px;}
+.game-chip span{color:var(--accent);}
+.server-status{display:flex;align-items:center;gap:7px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--green);}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.topbar-time{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text2);}
+.admin-badge{background:linear-gradient(135deg,var(--accent2),var(--purple));color:white;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:2px;}
+/* Creator chip in topbar */
+.creator-chip{display:flex;align-items:center;gap:8px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);border-radius:8px;padding:4px 10px;}
+.creator-chip img{width:24px;height:24px;border-radius:50%;object-fit:cover;}
+.creator-chip-text{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--purple);}
+
+.sidebar{position:fixed;left:0;top:60px;bottom:0;width:240px;background:var(--bg2);border-right:1px solid var(--border);z-index:100;overflow-y:auto;padding:20px 0;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.sidebar-section{padding:0 16px;margin-bottom:8px;}
+.sidebar-section-title{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);letter-spacing:3px;text-transform:uppercase;padding:12px 8px 6px;}
+/* Game info in sidebar */
+.sidebar-game{margin:8px 16px 16px;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.12);border-radius:10px;padding:12px;display:none;}
+.sidebar-game-img{width:100%;height:80px;border-radius:6px;object-fit:cover;margin-bottom:8px;background:rgba(0,212,255,.05);}
+.sidebar-game-name{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-game-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);margin-top:3px;}
+
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:14px;color:var(--text2);position:relative;border:1px solid transparent;user-select:none;}
+.nav-item:hover{background:rgba(0,212,255,.05);color:var(--text);border-color:rgba(0,212,255,.1);}
+.nav-item.active{background:rgba(0,212,255,.1);color:var(--accent);border-color:rgba(0,212,255,.2);}
+.nav-item.active::before{content:'';position:absolute;left:-16px;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--accent);border-radius:2px;box-shadow:0 0 8px var(--accent);}
+.nav-icon{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-left:auto;background:var(--accent2);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;min-width:20px;text-align:center;}
+.nav-badge.green{background:var(--green);color:var(--bg);}
+.nav-badge.yellow{background:var(--yellow);color:var(--bg);}
+.nav-badge.blue{background:var(--blue);color:var(--bg);}
+
+.main{margin-left:240px;margin-top:60px;padding:24px;position:relative;z-index:1;}
+.page{display:none;}
+.page.active{display:block;}
+
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+.page-title{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;color:var(--text);letter-spacing:2px;}
+.page-title span{color:var(--accent);}
+.page-subtitle{font-size:13px;color:var(--text2);margin-top:4px;font-family:'Share Tech Mono',monospace;}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;font-family:'Exo 2',sans-serif;letter-spacing:1px;text-transform:uppercase;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#0099cc);color:var(--bg);box-shadow:0 0 20px rgba(0,212,255,.3);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(0,212,255,.5);}
+.btn-danger{background:linear-gradient(135deg,var(--red),#cc0033);color:white;}
+.btn-danger:hover{transform:translateY(-1px);box-shadow:0 0 20px rgba(255,62,108,.4);}
+.btn-success{background:linear-gradient(135deg,var(--green),#00cc7a);color:var(--bg);}
+.btn-success:hover{transform:translateY(-1px);}
+.btn-warning{background:linear-gradient(135deg,var(--yellow),#cc9000);color:var(--bg);}
+.btn-warning:hover{transform:translateY(-1px);}
+.btn-purple{background:linear-gradient(135deg,var(--purple),#7c3aed);color:white;}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-sm{padding:6px 12px;font-size:11px;}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.stat-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:all .3s;cursor:default;}
+.stat-card:hover{border-color:var(--accent);box-shadow:0 0 20px rgba(0,212,255,.2);transform:translateY(-2px);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.stat-card.blue::before{background:linear-gradient(90deg,transparent,var(--blue),transparent);}
+.stat-card.red::before{background:linear-gradient(90deg,transparent,var(--red),transparent);}
+.stat-card.green::before{background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.stat-card.yellow::before{background:linear-gradient(90deg,transparent,var(--yellow),transparent);}
+.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:10px;}
+.stat-value{font-family:'Orbitron',monospace;font-size:32px;font-weight:700;line-height:1;margin-bottom:8px;}
+.stat-card.blue .stat-value{color:var(--blue);text-shadow:0 0 15px var(--blue);}
+.stat-card.red .stat-value{color:var(--red);text-shadow:0 0 15px var(--red);}
+.stat-card.green .stat-value{color:var(--green);text-shadow:0 0 15px var(--green);}
+.stat-card.yellow .stat-value{color:var(--yellow);text-shadow:0 0 15px var(--yellow);}
+.stat-change{font-size:12px;display:flex;align-items:center;gap:4px;}
+.stat-change.up{color:var(--green);}
+.stat-change.down{color:var(--red);}
+.stat-icon{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:40px;opacity:.07;}
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
+.panel-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2);}
+.panel-title{font-family:'Orbitron',monospace;font-size:13px;font-weight:600;color:var(--accent);letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:10px;}
+.panel-body{padding:20px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.grid-3-1{display:grid;grid-template-columns:3fr 1fr;gap:24px;}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead tr{background:rgba(0,0,0,.3);border-bottom:1px solid var(--border);}
+th{padding:12px 16px;text-align:left;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);letter-spacing:2px;text-transform:uppercase;font-weight:400;}
+td{padding:11px 16px;border-bottom:1px solid rgba(26,40,64,.5);color:var(--text);}
+tr:hover td{background:rgba(0,212,255,.03);}
+tr:last-child td{border-bottom:none;}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.badge-admin{background:rgba(168,85,247,.2);color:var(--purple);border:1px solid rgba(168,85,247,.3);}
+.badge-mod{background:rgba(0,212,255,.15);color:var(--blue);border:1px solid rgba(0,212,255,.2);}
+.badge-vip{background:rgba(255,184,0,.15);color:var(--yellow);border:1px solid rgba(255,184,0,.2);}
+.badge-player{background:rgba(90,122,154,.15);color:var(--text2);border:1px solid rgba(90,122,154,.2);}
+.badge-banned{background:rgba(255,62,108,.15);color:var(--red);border:1px solid rgba(255,62,108,.2);}
+.badge-online{background:rgba(0,255,157,.15);color:var(--green);border:1px solid rgba(0,255,157,.2);}
+.badge-offline{background:rgba(90,122,154,.1);color:var(--text2);border:1px solid var(--border);}
+.badge-muted{background:rgba(255,184,0,.15);color:var(--yellow);border:1px solid rgba(255,184,0,.2);}
+.badge-green{background:rgba(0,255,157,.15);color:var(--green);border:1px solid rgba(0,255,157,.2);}
+
+.search-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.search-wrap{position:relative;flex:1;}
+.search-wrap input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 16px 10px 40px;color:var(--text);font-size:13px;font-family:'Exo 2',sans-serif;outline:none;transition:all .2s;}
+.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,255,.1);}
+.search-wrap input::placeholder{color:var(--text2);}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:13px;}
+select{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;font-family:'Exo 2',sans-serif;outline:none;cursor:pointer;}
+
+.player-mini{display:flex;align-items:center;gap:10px;}
+.player-avatar{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;flex-shrink:0;}
+.player-name{font-weight:600;font-size:13px;}
+.player-id{font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace;}
+
+.activity-feed{display:flex;flex-direction:column;}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(26,40,64,.5);}
+.activity-item:last-child{border-bottom:none;}
+.activity-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.activity-icon.join{background:rgba(0,255,157,.15);color:var(--green);}
+.activity-icon.ban{background:rgba(255,62,108,.2);color:var(--red);}
+.activity-icon.kick{background:rgba(255,184,0,.15);color:var(--yellow);}
+.activity-icon.purchase{background:rgba(168,85,247,.15);color:var(--purple);}
+.activity-icon.warn{background:rgba(255,184,0,.15);color:var(--yellow);}
+.activity-icon.unban{background:rgba(0,255,157,.15);color:var(--green);}
+.activity-content{flex:1;}
+.activity-text{font-size:13px;color:var(--text);line-height:1.4;}
+.activity-text strong{color:var(--accent);}
+.activity-time{font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+
+.console{background:#050810;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.console-header{background:rgba(0,0,0,.3);padding:8px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.console-dot{width:10px;height:10px;border-radius:50%;}
+.console-body{padding:14px;height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:3px;}
+.console-body::-webkit-scrollbar{width:4px;}
+.console-body::-webkit-scrollbar-thumb{background:var(--border);}
+.clog{line-height:1.7;font-family:'Share Tech Mono',monospace;font-size:12px;}
+.clog .t{color:var(--text2);margin-right:8px;}
+.clog .info{color:var(--blue);}
+.clog .ok{color:var(--green);}
+.clog .err{color:var(--red);}
+.clog .warn{color:var(--yellow);}
+.clog .cmd{color:var(--purple);}
+.clog .sys{color:var(--accent);}
+.console-input-row{display:flex;align-items:center;padding:10px 16px;border-top:1px solid var(--border);gap:10px;}
+.cprompt{color:var(--accent);font-family:'Share Tech Mono',monospace;font-size:13px;}
+.cinput{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:13px;}
+
+.server-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.server-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;transition:all .2s;}
+.server-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 0 20px rgba(0,212,255,.15);}
+.cap-bar{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-top:6px;}
+.cap-fill{height:100%;border-radius:2px;}
+.ann-card{background:var(--bg2);border:1px solid rgba(0,212,255,.15);border-radius:10px;padding:16px;margin-bottom:12px;transition:all .2s;}
+.ann-card:hover{border-color:var(--accent);}
+.ban-row{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid rgba(26,40,64,.5);}
+.ban-row:last-child{border-bottom:none;}
+.chat-line{padding:8px 12px;border-radius:6px;margin-bottom:4px;font-size:12px;font-family:'Share Tech Mono',monospace;display:flex;gap:10px;align-items:baseline;}
+.chat-line.flagged{background:rgba(255,62,108,.08);border:1px solid rgba(255,62,108,.2);}
+.chat-line.normal{background:rgba(255,255,255,.02);}
+.ticket-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;cursor:pointer;transition:all .2s;}
+.ticket-card:hover{border-color:var(--accent);}
+
+.toast-container{position:fixed;top:76px;right:24px;z-index:9000;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
+.toast{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:13px;min-width:280px;animation:toastIn .3s ease;pointer-events:all;box-shadow:0 8px 32px rgba(0,0,0,.4);}
+.toast.success{border-color:rgba(0,255,157,.3);background:rgba(0,255,157,.05);}
+.toast.danger{border-color:rgba(255,62,108,.3);background:rgba(255,62,108,.05);}
+.toast.warning{border-color:rgba(255,184,0,.3);background:rgba(255,184,0,.05);}
+.toast.info{border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.05);}
+@keyframes toastIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+.toast.out{animation:toastOut .3s ease forwards;}
+@keyframes toastOut{to{opacity:0;transform:translateX(30px)}}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;width:480px;max-width:95vw;overflow:hidden;animation:modalIn .2s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(-20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2);}
+.modal-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;letter-spacing:2px;}
+.modal-close{background:none;border:none;color:var(--text2);cursor:pointer;font-size:22px;line-height:1;padding:0;transition:color .2s;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:24px;}
+.form-group-m{margin-bottom:16px;}
+.form-label-m{display:block;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;font-family:'Share Tech Mono',monospace;}
+.form-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;font-family:'Exo 2',sans-serif;outline:none;transition:all .2s;}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,255,.1);}
+textarea.form-input{resize:vertical;min-height:80px;}
+.form-select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;font-family:'Exo 2',sans-serif;outline:none;cursor:pointer;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:12px;justify-content:flex-end;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(26,40,64,.5);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-label{font-size:13px;font-weight:600;}
+.toggle-desc{font-size:11px;color:var(--text2);margin-top:2px;}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle input{display:none;}
+.toggle-track{position:absolute;inset:0;background:var(--border);border-radius:12px;cursor:pointer;transition:all .3s;}
+.toggle input:checked+.toggle-track{background:var(--accent);box-shadow:0 0 10px rgba(0,212,255,.4);}
+.toggle-track::after{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;top:3px;left:3px;transition:all .3s;}
+.toggle input:checked+.toggle-track::after{left:23px;}
+</style>
+</head>
+<body>
+
+<!-- ======= LOGIN PAGE ======= -->
+<div id="login-page">
+  <div class="login-bg"></div>
+  <div class="particles" id="particles"></div>
+  <div class="login-box">
+    <div class="login-topbar"></div>
+    <div class="login-header">
+      <div class="login-ring"><span style="font-size:26px;z-index:1">🛡️</span></div>
+      <div class="login-title">NEXUS <span>ADMIN</span></div>
+      <div class="login-sub">🔒 Secure Access Required</div>
+    </div>
+    <div class="login-body">
+      <div class="roblox-info">
+        <span style="font-size:22px">🎮</span>
+        <div class="roblox-info-text"><strong>Connexion Roblox requise</strong>Entrez l'ID du jeu, votre nom Roblox et le mot de passe admin.</div>
+      </div>
+
+      <!-- Champ ID Jeu -->
+      <div class="form-group">
+        <label class="form-label"><span class="label-dot"></span>ID du Jeu Roblox</label>
+        <div class="input-wrap">
+          <input type="text" id="inp-gameid" placeholder="ex: 12345678901" autocomplete="off" spellcheck="false" oninput="onGameIdInput(this.value)"/>
+          <span class="istat" id="st-id"></span>
+        </div>
+        <div class="field-hint">Trouvez l'ID dans l'URL de votre jeu (roblox.com/games/ID/...)</div>
+      </div>
+
+      <!-- Loading lookup -->
+      <div id="lookup-loading"><span class="loading-dots">Recherche du jeu</span></div>
+
+      <!-- Preview jeu -->
+      <div id="game-preview">
+        <div class="game-preview-inner">
+          <img id="game-thumb-img" class="game-thumb" src="" alt="thumb" onerror="this.style.display='none';document.getElementById('game-thumb-ph').style.display='flex'"/>
+          <div id="game-thumb-ph" class="game-thumb-placeholder" style="display:none">🎮</div>
+          <div class="game-info">
+            <div class="game-name" id="gp-name">—</div>
+            <div class="game-id-disp" id="gp-id">ID: —</div>
+            <div class="game-stats-row">
+              <div class="game-stat">👥 <span id="gp-playing">—</span></div>
+              <div class="game-stat">👍 <span id="gp-likes">—</span></div>
+              <div class="game-stat">🎮 <span id="gp-visits">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Champ nom Roblox créateur -->
+      <div class="form-group">
+        <label class="form-label"><span class="label-dot purple"></span>Votre Nom Roblox (Créateur)</label>
+        <div class="input-wrap">
+          <input type="text" id="inp-robloxname" placeholder="ex: MonNomRoblox" autocomplete="off" spellcheck="false" oninput="onCreatorInput(this.value)"/>
+          <span class="istat" id="st-creator"></span>
+        </div>
+        <div class="field-hint">Votre nom d'utilisateur Roblox exact</div>
+      </div>
+
+      <!-- Preview créateur -->
+      <div id="creator-section">
+        <div class="creator-inner">
+          <img id="creator-avatar-img" class="creator-avatar" src="" alt="avatar" onerror="this.style.display='none';document.getElementById('creator-avatar-ph').style.display='flex'"/>
+          <div id="creator-avatar-ph" class="creator-avatar-placeholder" style="display:none">👤</div>
+          <div class="creator-info">
+            <div class="creator-label">Compte Roblox Identifié</div>
+            <div class="creator-name" id="cp-name">—</div>
+            <div class="creator-id" id="cp-id">ID: —</div>
+            <div class="verified-badge">✓ Compte vérifié</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="form-group" style="margin-top:4px">
+        <label class="form-label"><span class="label-dot"></span>Mot de Passe Administrateur</label>
+        <div class="input-wrap">
+          <input type="password" id="inp-pw" placeholder="••••••••••••" autocomplete="off"/>
+          <span class="istat" id="st-pw"></span>
+        </div>
+      </div>
+
+      <div class="divider"><div class="div-line"></div><div class="div-text">VÉRIFICATION</div><div class="div-line"></div></div>
+      <div class="error-box" id="login-error"><span>⛔</span><span id="error-text">Identifiants incorrects.</span></div>
+      <button class="login-btn" id="login-btn" onclick="doLogin()">🔓 Accéder au Panel</button>
+    </div>
+    <div class="login-footer">
+      <div class="footer-sec">🔐 Connexion chiffrée — AES-256</div>
+      <div class="footer-ver">NEXUS v2.4.1</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= TOAST CONTAINER ======= -->
+<div class="toast-container" id="toasts"></div>
+
+<!-- ======= MODAL ======= -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">ACTION</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<!-- ======= ADMIN PANEL ======= -->
+<div id="admin-panel">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="topbar-logo">NEXUS <span>ADMIN</span></div>
+      <!-- Game name in topbar -->
+      <div class="game-chip">🎮 <span id="disp-gamename">—</span> · ID <span id="disp-gameid">—</span></div>
+    </div>
+    <div class="topbar-right">
+      <!-- Creator chip with avatar -->
+      <div class="creator-chip" id="topbar-creator-chip" style="display:none">
+        <img id="topbar-creator-img" src="" alt="" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1 1\'><rect fill=\'%23222\'/></svg>'"/>
+        <span class="creator-chip-text" id="topbar-creator-name">—</span>
+      </div>
+      <div class="server-status"><div class="dot"></div>ONLINE</div>
+      <div class="topbar-time" id="clock"></div>
+      <div class="admin-badge">ADMIN</div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar game info -->
+    <div class="sidebar-game" id="sidebar-game-box">
+      <img id="sidebar-game-img" class="sidebar-game-img" src="" alt="" onerror="this.style.display='none'"/>
+      <div class="sidebar-game-name" id="sidebar-game-name">—</div>
+      <div class="sidebar-game-sub" id="sidebar-game-sub">ID: —</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Navigation</div>
+      <div class="nav-item active" onclick="goPage('dashboard',this)"><span class="nav-icon">📊</span>Dashboard<span class="nav-badge green">Live</span></div>
+      <div class="nav-item" onclick="goPage('players',this)"><span class="nav-icon">👥</span>Joueurs<span class="nav-badge" id="nb-players">247</span></div>
+      <div class="nav-item" onclick="goPage('bans',this)"><span class="nav-icon">🚫</span>Bans<span class="nav-badge" id="nb-bans">12</span></div>
+      <div class="nav-item" onclick="goPage('chat',this)"><span class="nav-icon">💬</span>Chat Logs</div>
+      <div class="nav-item" onclick="goPage('servers',this)"><span class="nav-icon">🖥️</span>Serveurs</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Outils</div>
+      <div class="nav-item" onclick="goPage('announce',this)"><span class="nav-icon">📢</span>Annonces</div>
+      <div class="nav-item" onclick="goPage('economy',this)"><span class="nav-icon">💰</span>Économie</div>
+      <div class="nav-item" onclick="goPage('tickets',this)"><span class="nav-icon">🎫</span>Tickets<span class="nav-badge yellow" id="nb-tickets">5</span></div>
+      <div class="nav-item" onclick="goPage('settings',this)"><span class="nav-icon">⚙️</span>Paramètres</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Système</div>
+      <div class="nav-item" onclick="goPage('console',this)"><span class="nav-icon">📋</span>Console</div>
+      <div class="nav-item" onclick="goPage('analytics',this)"><span class="nav-icon">📈</span>Analytics</div>
+      <div class="nav-item" onclick="doLogout()" style="margin-top:6px;color:var(--red);"><span class="nav-icon">🚪</span>Déconnexion</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">DASHBOARD <span>OVERVIEW</span></div>
+          <div class="page-subtitle" id="dash-sub">Surveillance en temps réel</div>
+        </div>
+        <div style="display:flex;gap:12px;">
+          <button class="btn btn-ghost btn-sm" onclick="refreshDash()">🔄 Actualiser</button>
+          <button class="btn btn-primary btn-sm" onclick="openAnnounceModal()">📢 Annonce Globale</button>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card blue">
+          <div class="stat-label">Joueurs En Ligne</div>
+          <div class="stat-value" id="stat-online">247</div>
+          <div class="stat-change up">↑ +18 depuis 1h</div>
+          <div class="stat-icon">👥</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-label">Bans Actifs</div>
+          <div class="stat-value" id="stat-bans">12</div>
+          <div class="stat-change down">↑ +3 aujourd'hui</div>
+          <div class="stat-icon">🚫</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">Revenus Aujourd'hui</div>
+          <div class="stat-value">4.2K</div>
+          <div class="stat-change up">↑ +12%</div>
+          <div class="stat-icon">💎</div>
+        </div>
+        <div class="stat-card yellow">
+          <div class="stat-label">Tickets Ouverts</div>
+          <div class="stat-value" id="stat-tickets">5</div>
+          <div class="stat-change down">↓ -2 depuis hier</div>
+          <div class="stat-icon">🎫</div>
+        </div>
+      </div>
+      <div class="grid-3-1">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">👥 Joueurs Récents</div>
+            <button class="btn btn-ghost btn-sm" onclick="goPage('players',null)">Voir tout →</button>
+          </div>
+          <div style="overflow-x:auto;"><table><thead><tr><th>Joueur</th><th>Rôle</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="dash-players-table"></tbody></table></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">⚡ Activité</div></div>
+          <div class="panel-body"><div class="activity-feed" id="activity-feed"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PLAYERS ===== -->
+    <div class="page" id="page-players">
+      <div class="page-header">
+        <div><div class="page-title">GESTION <span>JOUEURS</span></div><div class="page-subtitle">Gérez tous les joueurs du jeu</div></div>
+        <button class="btn btn-primary btn-sm" onclick="openAddPlayerModal()">➕ Ajouter Joueur</button>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">👥 Liste des Joueurs</div><div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)" id="players-count"></div></div>
+        <div class="panel-body">
+          <div class="search-row">
+            <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" placeholder="Rechercher..." oninput="filterPlayers(this.value)" id="player-search"/></div>
+            <select onchange="filterPlayers(document.getElementById('player-search').value)" id="player-filter">
+              <option value="">Tous les rôles</option><option>Admin</option><option>Mod</option><option>VIP</option><option>Joueur</option>
+            </select>
+            <select onchange="filterPlayers(document.getElementById('player-search').value)" id="status-filter">
+              <option value="">Tous statuts</option><option>Online</option><option>Offline</option><option>Banned</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto;"><table><thead><tr><th>Joueur</th><th>Rôle</th><th>Statut</th><th>Dernière connexion</th><th>Actions</th></tr></thead><tbody id="players-table"></tbody></table></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BANS ===== -->
+    <div class="page" id="page-bans">
+      <div class="page-header">
+        <div><div class="page-title">LISTE <span>DES BANS</span></div><div class="page-subtitle">Gérez les joueurs bannis</div></div>
+        <button class="btn btn-danger btn-sm" onclick="openBanModal(null)">🚫 Nouveau Ban</button>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">🚫 Joueurs Bannis</div><div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)" id="bans-count"></div></div>
+        <div class="panel-body" id="bans-list"></div>
+      </div>
+    </div>
+
+    <!-- ===== CHAT ===== -->
+    <div class="page" id="page-chat">
+      <div class="page-header">
+        <div><div class="page-title">CHAT <span>LOGS</span></div><div class="page-subtitle">Historique des messages du jeu</div></div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-ghost btn-sm" onclick="toggleChatFilter()">🔴 Signalés seulement</button>
+          <button class="btn btn-danger btn-sm" onclick="clearChat()">🗑️ Effacer Logs</button>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-header"><div class="panel-title">💬 Messages</div></div><div class="panel-body" id="chat-logs" style="max-height:500px;overflow-y:auto;"></div></div>
+    </div>
+
+    <!-- ===== SERVERS ===== -->
+    <div class="page" id="page-servers">
+      <div class="page-header">
+        <div><div class="page-title">GESTION <span>SERVEURS</span></div><div class="page-subtitle">Contrôlez les instances du jeu</div></div>
+        <button class="btn btn-success btn-sm" onclick="openNewServerModal()">➕ Nouveau Serveur</button>
+      </div>
+      <div class="server-grid" id="servers-grid"></div>
+    </div>
+
+    <!-- ===== ANNOUNCE ===== -->
+    <div class="page" id="page-announce">
+      <div class="page-header"><div><div class="page-title">CENTRE <span>D'ANNONCES</span></div><div class="page-subtitle">Envoyez des messages à tous les joueurs</div></div></div>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">📢 Nouvelle Annonce</div></div>
+          <div class="panel-body">
+            <div class="form-group-m"><label class="form-label-m">Type</label><select class="form-select" id="ann-type"><option value="info">📘 Information</option><option value="warning">⚠️ Avertissement</option><option value="event">🎉 Événement</option><option value="maintenance">🔧 Maintenance</option><option value="ban">🚫 Bannissement</option></select></div>
+            <div class="form-group-m"><label class="form-label-m">Titre</label><input type="text" class="form-input" id="ann-title" placeholder="Titre..."/></div>
+            <div class="form-group-m"><label class="form-label-m">Message</label><textarea class="form-input" id="ann-msg" placeholder="Message..."></textarea></div>
+            <div class="form-group-m"><label class="form-label-m">Destinataires</label><select class="form-select" id="ann-target"><option value="all">Tous les joueurs</option><option value="admins">Admins seulement</option><option value="vip">VIP & Admins</option></select></div>
+            <div style="display:flex;gap:10px;margin-top:20px;">
+              <button class="btn btn-primary" style="flex:1" onclick="sendAnnouncement()">📢 Envoyer</button>
+              <button class="btn btn-ghost" onclick="previewAnnouncement()">👁️ Prévisualiser</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel"><div class="panel-header"><div class="panel-title">📋 Historique</div><button class="btn btn-ghost btn-sm" onclick="clearAnnouncements()">🗑️</button></div><div class="panel-body" id="ann-history" style="max-height:500px;overflow-y:auto;"></div></div>
+      </div>
+    </div>
+
+    <!-- ===== ECONOMY ===== -->
+    <div class="page" id="page-economy">
+      <div class="page-header"><div><div class="page-title">GESTION <span>ÉCONOMIE</span></div><div class="page-subtitle">Monnaie et transactions</div></div></div>
+      <div class="grid-2">
+        <div class="panel"><div class="panel-header"><div class="panel-title">💰 Modifier Solde</div></div><div class="panel-body">
+          <div class="form-group-m"><label class="form-label-m">Joueur cible</label><select class="form-select" id="eco-player"></select></div>
+          <div class="form-group-m"><label class="form-label-m">Action</label><select class="form-select" id="eco-action"><option value="add">➕ Ajouter</option><option value="remove">➖ Retirer</option><option value="set">🎯 Définir</option></select></div>
+          <div class="form-group-m"><label class="form-label-m">Montant</label><input type="number" class="form-input" id="eco-amount" placeholder="0" min="0"/></div>
+          <div class="form-group-m"><label class="form-label-m">Raison</label><input type="text" class="form-input" id="eco-reason" placeholder="Raison..."/></div>
+          <button class="btn btn-warning" style="width:100%;margin-top:8px" onclick="applyEconomy()">💰 Appliquer</button>
+        </div></div>
+        <div class="panel"><div class="panel-header"><div class="panel-title">📊 Transactions</div></div><div class="panel-body" id="eco-transactions"></div></div>
+      </div>
+    </div>
+
+    <!-- ===== TICKETS ===== -->
+    <div class="page" id="page-tickets">
+      <div class="page-header"><div><div class="page-title">SUPPORT <span>TICKETS</span></div><div class="page-subtitle">Demandes d'aide des joueurs</div></div></div>
+      <div id="tickets-list"></div>
+    </div>
+
+    <!-- ===== SETTINGS ===== -->
+    <div class="page" id="page-settings">
+      <div class="page-header"><div><div class="page-title">PARAMÈTRES <span>SYSTÈME</span></div><div class="page-subtitle">Configuration du panel admin</div></div><button class="btn btn-success btn-sm" onclick="saveSettings()">💾 Sauvegarder</button></div>
+      <div class="grid-2">
+        <div class="panel"><div class="panel-header"><div class="panel-title">⚙️ Général</div></div><div class="panel-body">
+          <div class="toggle-row"><div><div class="toggle-label">Anti-Cheat actif</div><div class="toggle-desc">Détection automatique des tricheurs</div></div><label class="toggle"><input type="checkbox" checked id="set-anticheat"/><span class="toggle-track"></span></label></div>
+          <div class="toggle-row"><div><div class="toggle-label">Auto-Ban</div><div class="toggle-desc">Bannissement automatique si détecté</div></div><label class="toggle"><input type="checkbox" checked id="set-autoban"/><span class="toggle-track"></span></label></div>
+          <div class="toggle-row"><div><div class="toggle-label">Filtre Chat</div><div class="toggle-desc">Filtrer les mots inappropriés</div></div><label class="toggle"><input type="checkbox" checked id="set-chatfilter"/><span class="toggle-track"></span></label></div>
+          <div class="toggle-row"><div><div class="toggle-label">Mode Maintenance</div><div class="toggle-desc">Bloquer l'accès aux nouveaux joueurs</div></div><label class="toggle"><input type="checkbox" id="set-maintenance"/><span class="toggle-track"></span></label></div>
+          <div class="toggle-row"><div><div class="toggle-label">Logs Détaillés</div><div class="toggle-desc">Enregistrer toutes les actions admin</div></div><label class="toggle"><input type="checkbox" checked id="set-logs"/><span class="toggle-track"></span></label></div>
+        </div></div>
+        <div class="panel"><div class="panel-header"><div class="panel-title">🔧 Limites</div></div><div class="panel-body">
+          <div class="form-group-m"><label class="form-label-m">Max joueurs par serveur</label><input type="number" class="form-input" value="50" id="set-maxplayers"/></div>
+          <div class="form-group-m"><label class="form-label-m">Durée ban par défaut (jours)</label><input type="number" class="form-input" value="7" id="set-bandays"/></div>
+          <div class="form-group-m"><label class="form-label-m">Warnings avant kick auto</label><input type="number" class="form-input" value="3" id="set-warns"/></div>
+          <div class="form-group-m"><label class="form-label-m">Préfixe des commandes</label><input type="text" class="form-input" value="!" id="set-prefix"/></div>
+          <div class="form-group-m"><label class="form-label-m">Message de bienvenue</label><textarea class="form-input" id="set-welcome" style="min-height:60px">Bienvenue sur le serveur !</textarea></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- ===== CONSOLE ===== -->
+    <div class="page" id="page-console">
+      <div class="page-header"><div><div class="page-title">CONSOLE <span>SYSTÈME</span></div><div class="page-subtitle">Interface de commandes avancée</div></div>
+        <div style="display:flex;gap:10px;"><button class="btn btn-ghost btn-sm" onclick="clearConsole()">🗑️ Effacer</button><button class="btn btn-warning btn-sm" onclick="consoleHelp()">❓ Aide</button></div>
+      </div>
+      <div class="console">
+        <div class="console-header">
+          <div class="console-dot" style="background:#ff5f57"></div><div class="console-dot" style="background:#febc2e"></div><div class="console-dot" style="background:#28c840"></div>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);margin-left:8px">nexus-admin — bash</span>
+        </div>
+        <div class="console-body" id="console-body"></div>
+        <div class="console-input-row">
+          <span class="cprompt">admin@nexus:~$</span>
+          <input class="cinput" id="console-input" placeholder="Entrez une commande... (tapez 'help')" onkeydown="handleConsoleKey(event)"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ANALYTICS ===== -->
+    <div class="page" id="page-analytics">
+      <div class="page-header"><div><div class="page-title">ANALYTICS <span>AVANCÉES</span></div><div class="page-subtitle">Statistiques détaillées</div></div><button class="btn btn-ghost btn-sm" onclick="refreshAnalytics()">🔄 Actualiser</button></div>
+      <div class="stats-grid">
+        <div class="stat-card blue"><div class="stat-label">Total Joueurs</div><div class="stat-value">14,832</div><div class="stat-change up">↑ +234 cette semaine</div><div class="stat-icon">👥</div></div>
+        <div class="stat-card green"><div class="stat-label">Revenus Total</div><div class="stat-value">89K</div><div class="stat-change up">↑ +8% ce mois</div><div class="stat-icon">💎</div></div>
+        <div class="stat-card yellow"><div class="stat-label">Temps Moyen</div><div class="stat-value">42m</div><div class="stat-change up">↑ +3min</div><div class="stat-icon">⏱️</div></div>
+        <div class="stat-card red"><div class="stat-label">Taux de Retour</div><div class="stat-value">68%</div><div class="stat-change up">↑ +2%</div><div class="stat-icon">🔄</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="panel"><div class="panel-header"><div class="panel-title">📊 Joueurs (7 jours)</div></div>
+          <div class="panel-body"><div id="chart-players" style="height:180px;display:flex;align-items:flex-end;gap:4px;padding:0 4px;"></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2)" id="chart-labels"></div></div>
+        </div>
+        <div class="panel"><div class="panel-header"><div class="panel-title">💰 Revenus (7 jours)</div></div>
+          <div class="panel-body"><div id="chart-revenue" style="height:180px;display:flex;align-items:flex-end;gap:4px;padding:0 4px;"></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2)" id="chart-rev-labels"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ======= CONFIG =======
+const PASS = 'Emergency154';
+// CORS proxy public (nécessaire car Roblox API ne supporte pas les requêtes depuis navigateur directement)
+const PROXY = 'https://corsproxy.io/?';
+
+let gameId = '';
+let gameData = null;
+let creatorData = null;
+let chatFilterOnly = false;
+let consoleHistory = [], consoleCursor = 0;
+let gameIdTimer = null, creatorTimer = null;
+
+// ======= API ROBLOX =======
+// Lookup jeu par ID
+async function lookupGame(id) {
+  try {
+    // 1. Info du jeu (universeId → place details)
+    const uniRes = await fetch(PROXY + encodeURIComponent(`https://apis.roblox.com/universes/v1/places/${id}/universe`));
+    if (!uniRes.ok) throw new Error('Jeu introuvable');
+    const uniData = await uniRes.json();
+    const universeId = uniData.universeId;
+
+    // 2. Détails du jeu
+    const gameRes = await fetch(PROXY + encodeURIComponent(`https://games.roblox.com/v1/games?universeIds=${universeId}`));
+    const gameJson = await gameRes.json();
+    const game = gameJson.data?.[0];
+    if (!game) throw new Error('Données du jeu introuvables');
+
+    // 3. Thumbnail du jeu
+    let thumbUrl = '';
+    try {
+      const thumbRes = await fetch(PROXY + encodeURIComponent(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=150x150&format=Png&isCircular=false`));
+      const thumbJson = await thumbRes.json();
+      thumbUrl = thumbJson.data?.[0]?.imageUrl || '';
+    } catch(e) {}
+
+    return {
+      universeId,
+      name: game.name,
+      playing: game.playing ?? 0,
+      visits: game.visits ?? 0,
+      likes: game.favoritedCount ?? 0,
+      thumbUrl
+    };
+  } catch(e) {
+    throw e;
+  }
+}
+
+// Lookup utilisateur Roblox par nom
+async function lookupUser(username) {
+  try {
+    // 1. Chercher l'utilisateur par nom
+    const res = await fetch(PROXY + encodeURIComponent('https://users.roblox.com/v1/usernames/users'), {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({usernames:[username], excludeBannedUsers:false})
+    });
+    const json = await res.json();
+    const user = json.data?.[0];
+    if (!user) throw new Error('Utilisateur introuvable');
+
+    // 2. Avatar headshot
+    let avatarUrl = '';
+    try {
+      const avatarRes = await fetch(PROXY + encodeURIComponent(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=true`));
+      const avatarJson = await avatarRes.json();
+      avatarUrl = avatarJson.data?.[0]?.imageUrl || '';
+    } catch(e) {}
+
+    return {
+      id: user.id,
+      name: user.name,
+      displayName: user.displayName,
+      avatarUrl
+    };
+  } catch(e) {
+    throw e;
+  }
+}
+
+// ======= LOGIN INPUT HANDLERS =======
+function onGameIdInput(val) {
+  clearTimeout(gameIdTimer);
+  const clean = val.trim();
+  document.getElementById('st-id').textContent = '';
+  document.getElementById('st-id').classList.remove('show');
+
+  // Cacher la preview si champ vide
+  if (!clean || !/^\d{6,}$/.test(clean)) {
+    document.getElementById('game-preview').style.display = 'none';
+    document.getElementById('lookup-loading').style.display = 'none';
+    return;
+  }
+
+  // Délai avant requête
+  gameIdTimer = setTimeout(async () => {
+    document.getElementById('lookup-loading').style.display = 'block';
+    document.getElementById('game-preview').style.display = 'none';
+    try {
+      const data = await lookupGame(clean);
+      gameData = data;
+      // Afficher preview
+      const imgEl = document.getElementById('game-thumb-img');
+      const phEl = document.getElementById('game-thumb-ph');
+      if (data.thumbUrl) {
+        imgEl.src = data.thumbUrl;
+        imgEl.style.display = '';
+        phEl.style.display = 'none';
+      } else {
+        imgEl.style.display = 'none';
+        phEl.style.display = 'flex';
+      }
+      document.getElementById('gp-name').textContent = data.name;
+      document.getElementById('gp-id').textContent = `ID: ${clean} · Universe: ${data.universeId}`;
+      document.getElementById('gp-playing').textContent = data.playing.toLocaleString();
+      document.getElementById('gp-likes').textContent = data.likes.toLocaleString();
+      document.getElementById('gp-visits').textContent = data.visits > 1000 ? (data.visits/1000).toFixed(1)+'K' : data.visits;
+      document.getElementById('game-preview').style.display = 'block';
+      document.getElementById('st-id').textContent = '✅';
+      document.getElementById('st-id').style.color = 'var(--green)';
+      document.getElementById('st-id').classList.add('show');
+      document.getElementById('inp-gameid').classList.remove('error');
+      document.getElementById('inp-gameid').classList.add('success');
+    } catch(e) {
+      gameData = null;
+      document.getElementById('game-preview').style.display = 'none';
+      document.getElementById('st-id').textContent = '❌';
+      document.getElementById('st-id').style.color = 'var(--red)';
+      document.getElementById('st-id').classList.add('show');
+      document.getElementById('inp-gameid').classList.add('error');
+      document.getElementById('inp-gameid').classList.remove('success');
+    }
+    document.getElementById('lookup-loading').style.display = 'none';
+  }, 800);
+}
+
+function onCreatorInput(val) {
+  clearTimeout(creatorTimer);
+  const clean = val.trim();
+  document.getElementById('st-creator').textContent = '';
+  document.getElementById('st-creator').classList.remove('show');
+  if (!clean || clean.length < 3) {
+    document.getElementById('creator-section').style.display = 'none';
+    return;
+  }
+  creatorTimer = setTimeout(async () => {
+    try {
+      const data = await lookupUser(clean);
+      creatorData = data;
+      const imgEl = document.getElementById('creator-avatar-img');
+      const phEl = document.getElementById('creator-avatar-ph');
+      if (data.avatarUrl) {
+        imgEl.src = data.avatarUrl;
+        imgEl.style.display = '';
+        phEl.style.display = 'none';
+      } else {
+        imgEl.style.display = 'none';
+        phEl.style.display = 'flex';
+      }
+      document.getElementById('cp-name').textContent = data.displayName || data.name;
+      document.getElementById('cp-id').textContent = `@${data.name} · ID: ${data.id}`;
+      document.getElementById('creator-section').style.display = 'block';
+      document.getElementById('st-creator').textContent = '✅';
+      document.getElementById('st-creator').style.color = 'var(--green)';
+      document.getElementById('st-creator').classList.add('show');
+      document.getElementById('inp-robloxname').classList.remove('error');
+    } catch(e) {
+      creatorData = null;
+      document.getElementById('creator-section').style.display = 'none';
+      document.getElementById('st-creator').textContent = '❌';
+      document.getElementById('st-creator').style.color = 'var(--red)';
+      document.getElementById('st-creator').classList.add('show');
+    }
+  }, 700);
+}
+
+// ======= LOGIN =======
+function doLogin(){
+  const gid = document.getElementById('inp-gameid').value.trim();
+  const creatorName = document.getElementById('inp-robloxname').value.trim();
+  const pw = document.getElementById('inp-pw').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  const errTxt = document.getElementById('error-text');
+  err.classList.remove('show');
+
+  if (!gid || !/^\d{6,}$/.test(gid)) {
+    errTxt.textContent = 'ID de jeu invalide (minimum 6 chiffres).';
+    err.classList.add('show');
+    document.getElementById('inp-gameid').classList.add('error');
+    return;
+  }
+  if (!creatorName) {
+    errTxt.textContent = 'Entrez votre nom Roblox.';
+    err.classList.add('show');
+    document.getElementById('inp-robloxname').classList.add('error');
+    return;
+  }
+  if (pw !== PASS) {
+    errTxt.textContent = 'Mot de passe incorrect. Accès refusé.';
+    err.classList.add('show');
+    document.getElementById('inp-pw').classList.add('error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⚡ Connexion en cours...';
+  gameId = gid;
+
+  setTimeout(() => {
+    document.getElementById('login-page').classList.add('closing');
+    setTimeout(() => {
+      document.getElementById('login-page').style.display = 'none';
+      const ap = document.getElementById('admin-panel');
+      ap.classList.add('visible');
+      setTimeout(() => ap.classList.add('fadein'), 50);
+      initPanel();
+    }, 600);
+  }, 1200);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-page').style.display !== 'none' && !document.getElementById('login-page').classList.contains('closing')) doLogin();
+});
+
+// Particles
+const pc = document.getElementById('particles');
+for (let i = 0; i < 35; i++) {
+  const p = document.createElement('div'); p.className = 'particle';
+  p.style.cssText = `left:${Math.random()*100}%;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;animation-duration:${Math.random()*15+8}s;animation-delay:${Math.random()*10}s;`;
+  if (Math.random() > .7) p.style.background = 'var(--purple)';
+  if (Math.random() > .85) p.style.background = 'var(--accent2)';
+  pc.appendChild(p);
+}
+
+// ======= DATA =======
+const players = [
+  {id:'#4821047',name:'XRaider99',role:'Admin',status:'Online',last:'Il y a 2 min',color:'#a855f7,#7c3aed',coins:12400,warns:0},
+  {id:'#7392841',name:'NovaKiller_X',role:'VIP',status:'Online',last:'Il y a 5 min',color:'#00d4ff,#0099cc',coins:8320,warns:1},
+  {id:'#1039482',name:'ShadowHack22',role:'Joueur',status:'Banned',last:'Il y a 1h',color:'#ff3e6c,#cc0033',coins:0,warns:5},
+  {id:'#5548201',name:'GlitchTamer',role:'Mod',status:'Online',last:'Il y a 12 min',color:'#ffb800,#cc9000',coins:5100,warns:0},
+  {id:'#8831204',name:'PixelStorm',role:'Joueur',status:'Offline',last:'Il y a 2h',color:'#00ff9d,#00cc7a',coins:2340,warns:2},
+  {id:'#3312048',name:'DarkNinja77',role:'Joueur',status:'Online',last:'Il y a 8 min',color:'#a855f7,#7c3aed',coins:760,warns:0},
+];
+const bans = [
+  {id:'#1039482',name:'ShadowHack22',reason:'Triche — Aimbot détecté',date:'2026-03-05',expires:'Permanent',by:'XRaider99'},
+  {id:'#2201944',name:'HackMaster_X',reason:'Exploit — Duplication coins',date:'2026-03-04',expires:'2026-03-14',by:'GlitchTamer'},
+];
+const chatLogs = [
+  {user:'XRaider99',msg:'Bienvenue sur le serveur !',time:'14:32',flagged:false},
+  {user:'ShadowHack22',msg:'achète des hacks ici → discord.gg/xxx',time:'14:33',flagged:true},
+  {user:'NovaKiller_X',msg:'GG les gars belle partie',time:'14:34',flagged:false},
+  {user:'GrieferLOL',msg:'@$#! vous tous les admins',time:'14:36',flagged:true},
+];
+const servers = [
+  {id:'SRV-001',region:'EU-West',players:48,max:50,ping:12,status:'online'},
+  {id:'SRV-002',region:'US-East',players:32,max:50,ping:87,status:'online'},
+  {id:'SRV-003',region:'AS-South',players:19,max:50,ping:142,status:'online'},
+  {id:'SRV-004',region:'EU-East',players:0,max:50,ping:0,status:'offline'},
+];
+const tickets = [
+  {id:'TK-001',user:'PixelStorm',subject:'Coins non reçus après achat',priority:'high',status:'open',time:'Il y a 1h',msg:'J\'ai acheté le pack 1000 coins mais je n\'ai rien reçu.'},
+  {id:'TK-002',user:'DarkNinja77',subject:'Joueur abusif',priority:'medium',status:'open',time:'Il y a 2h',msg:'Un joueur me harcèle depuis 30 minutes.'},
+];
+const transactions = [], announcements = [];
+const activityLog = [
+  {type:'join',text:'<strong>XRaider99</strong> a rejoint le serveur',time:'il y a 2 min'},
+  {type:'ban',text:'<strong>ShadowHack22</strong> banni — Triche',time:'il y a 1h'},
+  {type:'purchase',text:'<strong>NovaKiller_X</strong> a acheté VIP Pass',time:'il y a 2h'},
+];
+
+// ======= INIT PANEL =======
+function initPanel(){
+  // Game info dans la topbar et sidebar
+  const gname = gameData?.name || `Jeu #${gameId}`;
+  document.getElementById('disp-gameid').textContent = gameId;
+  document.getElementById('disp-gamename').textContent = gname;
+  document.getElementById('dash-sub').textContent = `Surveillance en temps réel — ${gname}`;
+
+  // Sidebar game box
+  if (gameData) {
+    const sg = document.getElementById('sidebar-game-box');
+    sg.style.display = 'block';
+    const sgImg = document.getElementById('sidebar-game-img');
+    if (gameData.thumbUrl) { sgImg.src = gameData.thumbUrl; sgImg.style.display = ''; }
+    document.getElementById('sidebar-game-name').textContent = gameData.name;
+    document.getElementById('sidebar-game-sub').textContent = `ID: ${gameId}`;
+  }
+
+  // Creator chip dans topbar
+  if (creatorData) {
+    const chip = document.getElementById('topbar-creator-chip');
+    chip.style.display = 'flex';
+    const img = document.getElementById('topbar-creator-img');
+    if (creatorData.avatarUrl) img.src = creatorData.avatarUrl;
+    document.getElementById('topbar-creator-name').textContent = creatorData.displayName || creatorData.name;
+  }
+
+  renderDashPlayers(); renderActivity(); renderPlayers(); renderBans();
+  renderChat(); renderServers(); renderTickets(); renderEcoPlayer();
+  renderEcoTransactions(); renderAnnHistory(); renderAnalyticsCharts();
+  initConsole();
+  setInterval(updateClock, 1000); updateClock();
+  setInterval(liveStats, 3000);
+}
+
+function updateClock(){
+  const t = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const el = document.getElementById('clock'); if(el) el.textContent = t;
+}
+let liveCount = 247;
+function liveStats(){
+  liveCount = Math.max(200, Math.min(300, liveCount+(Math.floor(Math.random()*5)-2)));
+  const el = document.getElementById('stat-online'); if(el) el.textContent = liveCount;
+}
+
+// ======= NAVIGATION =======
+function goPage(name, navEl){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('page-'+name);
+  if(pg) pg.classList.add('active');
+  if(navEl) navEl.classList.add('active');
+}
+
+// ======= TOAST =======
+function toast(msg, type='info', duration=3500){
+  const icons = {success:'✅',danger:'❌',warning:'⚠️',info:'ℹ️'};
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span style="font-size:18px">${icons[type]||'ℹ️'}</span><span style="font-size:13px">${msg}</span>`;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 350); }, duration);
+}
+
+// ======= MODAL =======
+function openModal(title, body, footer){
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-footer').innerHTML = footer;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+document.getElementById('modal-overlay').addEventListener('click', e => { if(e.target===document.getElementById('modal-overlay')) closeModal(); });
+
+// ======= RENDER HELPERS =======
+function roleBadge(r){ const m={Admin:'badge-admin',Mod:'badge-mod',VIP:'badge-vip',Joueur:'badge-player'}; return `<span class="badge ${m[r]||'badge-player'}">${r}</span>`; }
+function statusBadge(s){ if(s==='Online') return '<span class="badge badge-online">● Online</span>'; if(s==='Banned') return '<span class="badge badge-banned">⛔ Banni</span>'; return '<span class="badge badge-offline">○ Offline</span>'; }
+function avatar(name, color){ return `<div class="player-avatar" style="background:linear-gradient(135deg,${color})">${name.substring(0,2).toUpperCase()}</div>`; }
+
+// ======= DASHBOARD =======
+function renderDashPlayers(){
+  const tb = document.getElementById('dash-players-table');
+  tb.innerHTML = players.slice(0,5).map(p=>`<tr>
+    <td><div class="player-mini">${avatar(p.name,p.color)}<div><div class="player-name">${p.name}</div><div class="player-id">${p.id}</div></div></div></td>
+    <td>${roleBadge(p.role)}</td><td>${statusBadge(p.status)}</td>
+    <td><div style="display:flex;gap:6px">
+      <button class="btn btn-ghost btn-sm" onclick="viewPlayer('${p.name}')">🔍</button>
+      ${p.status!=='Banned'?`<button class="btn btn-danger btn-sm" onclick="openBanModal('${p.name}')">🚫</button>`:`<button class="btn btn-success btn-sm" onclick="unbanPlayer('${p.name}')">✓</button>`}
+    </div></td></tr>`).join('');
+}
+function renderActivity(){
+  const feed = document.getElementById('activity-feed');
+  feed.innerHTML = activityLog.map(a=>`<div class="activity-item"><div class="activity-icon ${a.type}">${a.type==='join'?'→':a.type==='ban'?'⛔':a.type==='purchase'?'💎':'⚠️'}</div><div class="activity-content"><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div></div>`).join('');
+}
+function refreshDash(){ renderDashPlayers(); renderActivity(); toast('Dashboard actualisé','success',2000); }
+
+// ======= PLAYERS =======
+function renderPlayers(filtered){
+  const data = filtered || players;
+  document.getElementById('players-count').textContent = `${data.length} joueur(s)`;
+  const tb = document.getElementById('players-table');
+  tb.innerHTML = data.map(p=>`<tr>
+    <td><div class="player-mini">${avatar(p.name,p.color)}<div><div class="player-name">${p.name}</div><div class="player-id">${p.id}</div></div></div></td>
+    <td>${roleBadge(p.role)}</td><td>${statusBadge(p.status)}</td>
+    <td style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">${p.last}</td>
+    <td><div style="display:flex;gap:5px;flex-wrap:wrap;">
+      <button class="btn btn-ghost btn-sm" onclick="viewPlayer('${p.name}')">🔍 Voir</button>
+      ${p.status!=='Banned'?`<button class="btn btn-warning btn-sm" onclick="openWarnModal('${p.name}')">⚠️ Warn</button><button class="btn btn-ghost btn-sm" onclick="kickPlayer('${p.name}')">👢 Kick</button><button class="btn btn-danger btn-sm" onclick="openBanModal('${p.name}')">🚫 Ban</button>`:`<button class="btn btn-success btn-sm" onclick="unbanPlayer('${p.name}')">✓ Débannir</button>`}
+      <button class="btn btn-purple btn-sm" onclick="openRoleModal('${p.name}')">👑</button>
+    </div></td></tr>`).join('');
+}
+function filterPlayers(q){
+  const rf = document.getElementById('player-filter').value;
+  const sf = document.getElementById('status-filter').value;
+  renderPlayers(players.filter(p=>(!q||p.name.toLowerCase().includes(q.toLowerCase())||p.id.includes(q))&&(!rf||p.role===rf)&&(!sf||p.status===sf)));
+}
+function viewPlayer(name){
+  const p = players.find(x=>x.name===name); if(!p) return;
+  openModal(`👤 ${p.name}`,`<div style="display:grid;gap:12px;"><div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">${avatar(p.name,p.color)}<div><div style="font-family:'Orbitron',monospace;font-size:16px;color:var(--accent)">${p.name}</div><div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">${p.id}</div></div><div style="margin-left:auto">${roleBadge(p.role)}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">STATUT</div>${statusBadge(p.status)}</div><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">COINS</div><div style="font-family:'Orbitron',monospace;font-size:18px;color:var(--yellow)">${p.coins.toLocaleString()}</div></div><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">WARNINGS</div><div style="font-family:'Orbitron',monospace;font-size:18px;color:${p.warns>0?'var(--red)':'var(--green)'}">${p.warns}</div></div><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">CONNEXION</div><div style="font-size:12px;font-family:'Share Tech Mono',monospace">${p.last}</div></div></div></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>${p.status!=='Banned'?`<button class="btn btn-danger" onclick="closeModal();openBanModal('${p.name}')">🚫 Ban</button>`:`<button class="btn btn-success" onclick="closeModal();unbanPlayer('${p.name}')">✓ Débannir</button>`}`);
+}
+function openWarnModal(name){
+  openModal(`⚠️ Avertir ${name}`,`<div class="form-group-m"><label class="form-label-m">Raison</label><input type="text" class="form-input" id="warn-reason" placeholder="Comportement inapproprié..."/></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-warning" onclick="doWarn('${name}')">⚠️ Avertir</button>`);
+}
+function doWarn(name){
+  const reason = document.getElementById('warn-reason').value||'Comportement inapproprié';
+  const p = players.find(x=>x.name===name); if(p) p.warns++;
+  activityLog.unshift({type:'warn',text:`<strong>${name}</strong> averti — ${reason}`,time:'à l\'instant'});
+  addConsoleLine('warn',`⚠️ WARN ${name} → "${reason}"`);
+  closeModal(); toast(`${name} averti`,'warning');
+  renderDashPlayers(); renderActivity(); renderPlayers();
+}
+function openBanModal(name){
+  openModal(`🚫 ${name?'Bannir '+name:'Nouveau Ban'}`,`${!name?`<div class="form-group-m"><label class="form-label-m">Nom du joueur</label><input type="text" class="form-input" id="ban-target"/></div>`:''}<div class="form-group-m"><label class="form-label-m">Raison</label><input type="text" class="form-input" id="ban-reason" placeholder="Triche, exploit..."/></div><div class="form-group-m"><label class="form-label-m">Durée</label><select class="form-select" id="ban-duration"><option>1 jour</option><option>3 jours</option><option selected>7 jours</option><option>30 jours</option><option>Permanent</option></select></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-danger" onclick="doBan('${name||''}')">🚫 Bannir</button>`);
+}
+function doBan(name){
+  const target = name||document.getElementById('ban-target')?.value;
+  if(!target){toast('Entrez un nom','danger');return;}
+  const reason = document.getElementById('ban-reason').value||'Non spécifié';
+  const dur = document.getElementById('ban-duration').value;
+  const p = players.find(x=>x.name===target); if(p) p.status='Banned';
+  bans.unshift({id:p?.id||'#???',name:target,reason,date:new Date().toISOString().split('T')[0],expires:dur,by:'Admin'});
+  activityLog.unshift({type:'ban',text:`<strong>${target}</strong> banni — ${reason}`,time:'à l\'instant'});
+  addConsoleLine('err',`🚫 BAN ${target} | "${reason}" | ${dur}`);
+  const nb=document.getElementById('nb-bans'); if(nb) nb.textContent=bans.length;
+  const sb=document.getElementById('stat-bans'); if(sb) sb.textContent=bans.length;
+  closeModal(); toast(`${target} banni (${dur})`,'danger');
+  renderDashPlayers(); renderActivity(); renderPlayers(); renderBans();
+}
+function unbanPlayer(name){
+  openModal(`✅ Débannir ${name}`,`<p style="color:var(--text)">Êtes-vous sûr de vouloir débannir <strong style="color:var(--accent)">${name}</strong> ?</p>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-success" onclick="doUnban('${name}')">✅ Débannir</button>`);
+}
+function doUnban(name){
+  const p=players.find(x=>x.name===name); if(p) p.status='Offline';
+  const idx=bans.findIndex(b=>b.name===name); if(idx>-1) bans.splice(idx,1);
+  activityLog.unshift({type:'unban',text:`<strong>${name}</strong> débanni`,time:'à l\'instant'});
+  addConsoleLine('ok',`✅ UNBAN ${name}`);
+  const nb=document.getElementById('nb-bans'); if(nb) nb.textContent=bans.length;
+  const sb=document.getElementById('stat-bans'); if(sb) sb.textContent=bans.length;
+  closeModal(); toast(`${name} débanni !`,'success');
+  renderDashPlayers(); renderActivity(); renderPlayers(); renderBans();
+}
+function kickPlayer(name){
+  activityLog.unshift({type:'kick',text:`<strong>${name}</strong> expulsé du serveur`,time:'à l\'instant'});
+  addConsoleLine('warn',`👢 KICK ${name}`);
+  toast(`${name} expulsé`,'warning'); renderActivity();
+}
+function openRoleModal(name){
+  const p=players.find(x=>x.name===name); if(!p) return;
+  openModal(`👑 Changer rôle — ${name}`,`<div class="form-group-m"><label class="form-label-m">Nouveau rôle</label><select class="form-select" id="new-role"><option ${p.role==='Joueur'?'selected':''}>Joueur</option><option ${p.role==='VIP'?'selected':''}>VIP</option><option ${p.role==='Mod'?'selected':''}>Mod</option><option ${p.role==='Admin'?'selected':''}>Admin</option></select></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-purple" onclick="doRoleChange('${name}')">👑 Appliquer</button>`);
+}
+function doRoleChange(name){
+  const p=players.find(x=>x.name===name); if(!p) return;
+  const nr=document.getElementById('new-role').value; p.role=nr;
+  addConsoleLine('cmd',`👑 ROLE ${name} → ${nr}`);
+  closeModal(); toast(`Rôle de ${name} changé en ${nr}`,'success');
+  renderDashPlayers(); renderPlayers();
+}
+function openAddPlayerModal(){
+  openModal('➕ Ajouter un Joueur',`<div class="form-group-m"><label class="form-label-m">Nom Roblox</label><input type="text" class="form-input" id="add-name"/></div><div class="form-group-m"><label class="form-label-m">Rôle</label><select class="form-select" id="add-role"><option>Joueur</option><option>VIP</option><option>Mod</option><option>Admin</option></select></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-primary" onclick="doAddPlayer()">➕ Ajouter</button>`);
+}
+function doAddPlayer(){
+  const name=document.getElementById('add-name').value; if(!name){toast('Entrez un nom','danger');return;}
+  const role=document.getElementById('add-role').value;
+  players.push({id:`#${Math.floor(Math.random()*9000000+1000000)}`,name,role,status:'Offline',last:'Jamais',color:'#00d4ff,#0099cc',coins:0,warns:0});
+  document.getElementById('nb-players').textContent=players.length;
+  addConsoleLine('ok',`➕ ADDPLAYER ${name} [${role}]`);
+  closeModal(); toast(`${name} ajouté`,'success');
+  renderPlayers(); renderDashPlayers();
+}
+
+// ======= BANS =======
+function renderBans(){
+  document.getElementById('bans-count').textContent=`${bans.length} ban(s) actif(s)`;
+  const list=document.getElementById('bans-list');
+  if(!bans.length){list.innerHTML='<div style="text-align:center;color:var(--text2);padding:30px;font-family:\'Share Tech Mono\',monospace">Aucun ban actif</div>';return;}
+  list.innerHTML=bans.map(b=>`<div class="ban-row"><div style="width:42px;height:42px;border-radius:8px;background:rgba(255,62,108,.15);display:flex;align-items:center;justify-content:center;font-size:20px">🚫</div><div style="flex:1"><div style="font-weight:700">${b.name} <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2)">${b.id}</span></div><div style="font-size:12px;color:var(--red)">${b.reason}</div><div style="font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace;margin-top:3px">Banni le ${b.date} — Expire: ${b.expires} — Par: ${b.by}</div></div><button class="btn btn-success btn-sm" onclick="unbanPlayer('${b.name}')">✓ Débannir</button></div>`).join('');
+}
+
+// ======= CHAT =======
+function renderChat(){
+  const box=document.getElementById('chat-logs');
+  const data=chatFilterOnly?chatLogs.filter(c=>c.flagged):chatLogs;
+  box.innerHTML=data.map((c,i)=>`<div class="chat-line ${c.flagged?'flagged':'normal'}"><span style="color:var(--text2);min-width:45px">${c.time}</span><span style="color:var(--accent);min-width:120px;font-weight:700">${c.user}</span><span style="flex:1;${c.flagged?'color:var(--red)':''}">${c.flagged?'🚩 ':''} ${c.msg}</span>${c.flagged?`<button class="btn btn-danger btn-sm" onclick="deleteChatMsg(${i})">🗑️</button>`:''}  </div>`).join('');
+}
+function toggleChatFilter(){ chatFilterOnly=!chatFilterOnly; toast(chatFilterOnly?'Signalés seulement':'Tous les messages','info',2000); renderChat(); }
+function deleteChatMsg(i){ chatLogs.splice(i,1); toast('Message supprimé','success',2000); renderChat(); }
+function clearChat(){ openModal('🗑️ Effacer Logs',`<p style="color:var(--text)">Supprimer tous les logs ?</p>`,`<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-danger" onclick="chatLogs.length=0;renderChat();closeModal();toast('Logs effacés','info')">🗑️ Effacer</button>`); }
+
+// ======= SERVERS =======
+function renderServers(){
+  const grid=document.getElementById('servers-grid');
+  grid.innerHTML=servers.map(s=>{
+    const pct=Math.round(s.players/s.max*100);
+    const col=pct>80?'var(--red)':pct>50?'var(--yellow)':'var(--green)';
+    const sb=s.status==='online'?'<span class="badge badge-online">● Online</span>':s.status==='offline'?'<span class="badge badge-offline">○ Offline</span>':'<span class="badge badge-muted">🔧 Maintenance</span>';
+    return `<div class="server-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--accent)">${s.id}</div>${sb}</div><div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-family:'Share Tech Mono',monospace">🌍 ${s.region}</div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>👥 ${s.players}/${s.max}</span><span style="font-family:'Share Tech Mono',monospace;color:${s.ping>100?'var(--red)':'var(--green)'}">📡 ${s.ping}ms</span></div><div class="cap-bar"><div class="cap-fill" style="width:${pct}%;background:${col}"></div></div><div style="display:flex;gap:6px;margin-top:14px">${s.status==='online'?`<button class="btn btn-ghost btn-sm" style="flex:1" onclick="serverAction('${s.id}','restart')">🔄 Restart</button><button class="btn btn-danger btn-sm" style="flex:1" onclick="serverAction('${s.id}','stop')">⏹ Stop</button>`:`<button class="btn btn-success btn-sm" style="flex:1" onclick="serverAction('${s.id}','start')">▶ Démarrer</button>`}</div></div>`;
+  }).join('');
+}
+function serverAction(id,action){
+  const s=servers.find(x=>x.id===id); if(!s) return;
+  if(action==='stop'){s.status='offline';s.players=0;s.ping=0;}
+  if(action==='start'){s.status='online';s.ping=Math.floor(Math.random()*100+10);}
+  if(action==='restart'){s.players=0;}
+  addConsoleLine(action==='stop'?'err':action==='start'?'ok':'warn',`⚙️ SERVER ${action.toUpperCase()} ${id}`);
+  toast(`Serveur ${id} : ${action}`,'info'); renderServers();
+}
+function openNewServerModal(){
+  openModal('➕ Nouveau Serveur',`<div class="form-group-m"><label class="form-label-m">Région</label><select class="form-select" id="new-srv-region"><option>EU-West</option><option>EU-East</option><option>US-East</option><option>US-West</option><option>AS-South</option></select></div><div class="form-group-m"><label class="form-label-m">Capacité max</label><input type="number" class="form-input" id="new-srv-max" value="50"/></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-success" onclick="doNewServer()">➕ Créer</button>`);
+}
+function doNewServer(){
+  const region=document.getElementById('new-srv-region').value;
+  const max=parseInt(document.getElementById('new-srv-max').value)||50;
+  const id=`SRV-00${servers.length+1}`;
+  servers.push({id,region,players:0,max,ping:Math.floor(Math.random()*100+20),status:'online'});
+  addConsoleLine('ok',`➕ SERVER CREATED ${id}`);
+  closeModal(); toast(`Serveur ${id} créé`,'success'); renderServers();
+}
+
+// ======= ANNONCES =======
+function renderAnnHistory(){
+  const box=document.getElementById('ann-history');
+  if(!announcements.length){box.innerHTML='<div style="text-align:center;color:var(--text2);padding:20px;font-family:\'Share Tech Mono\',monospace;font-size:12px">Aucune annonce</div>';return;}
+  box.innerHTML=announcements.map(a=>`<div class="ann-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-weight:700;font-size:13px">${a.title}</span><span style="font-size:10px;color:var(--text2);font-family:'Share Tech Mono',monospace">${a.time}</span></div><div style="font-size:12px;color:var(--text2);margin-bottom:8px">${a.msg}</div><span class="badge" style="font-size:10px;background:rgba(0,212,255,.1);color:var(--accent);border:1px solid rgba(0,212,255,.2)">${a.type}</span></div>`).join('');
+}
+function openAnnounceModal(){
+  openModal('📢 Annonce Globale',`<div class="form-group-m"><label class="form-label-m">Message</label><textarea class="form-input" id="quick-ann-msg" placeholder="Votre annonce..."></textarea></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-primary" onclick="quickAnnounce()">📢 Envoyer</button>`);
+}
+function quickAnnounce(){
+  const msg=document.getElementById('quick-ann-msg').value; if(!msg){toast('Entrez un message','danger');return;}
+  announcements.unshift({title:'Annonce Globale',msg,type:'info',target:'Tous',time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})});
+  addConsoleLine('sys',`📢 ANNOUNCE → "${msg}"`);
+  closeModal(); toast('Annonce envoyée !','success'); renderAnnHistory();
+}
+function sendAnnouncement(){
+  const title=document.getElementById('ann-title').value;
+  const msg=document.getElementById('ann-msg').value;
+  const type=document.getElementById('ann-type').value;
+  const target=document.getElementById('ann-target').options[document.getElementById('ann-target').selectedIndex].text;
+  if(!title||!msg){toast('Remplissez tous les champs','danger');return;}
+  announcements.unshift({title,msg,type,target,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})});
+  addConsoleLine('sys',`📢 ANNOUNCE [${type}] "${title}"`);
+  toast(`Annonce "${title}" envoyée !`,'success');
+  document.getElementById('ann-title').value=''; document.getElementById('ann-msg').value='';
+  renderAnnHistory();
+}
+function previewAnnouncement(){
+  const title=document.getElementById('ann-title').value||'Titre...';
+  const msg=document.getElementById('ann-msg').value||'Message...';
+  const type=document.getElementById('ann-type').value;
+  const icons={info:'📘',warning:'⚠️',event:'🎉',maintenance:'🔧',ban:'🚫'};
+  openModal('👁️ Prévisualisation',`<div style="background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:10px;padding:16px"><div style="font-size:20px;margin-bottom:8px">${icons[type]||'📢'}</div><div style="font-family:'Orbitron',monospace;font-size:15px;color:var(--accent);margin-bottom:8px">${title}</div><div style="font-size:13px;color:var(--text);line-height:1.6">${msg}</div></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>`);
+}
+function clearAnnouncements(){ announcements.length=0; renderAnnHistory(); toast('Historique effacé','info',2000); }
+
+// ======= ECONOMY =======
+function renderEcoPlayer(){ const sel=document.getElementById('eco-player'); sel.innerHTML=players.filter(p=>p.status!=='Banned').map(p=>`<option value="${p.name}">${p.name} (${p.coins.toLocaleString()} coins)</option>`).join(''); }
+function applyEconomy(){
+  const name=document.getElementById('eco-player').value;
+  const action=document.getElementById('eco-action').value;
+  const amount=parseInt(document.getElementById('eco-amount').value)||0;
+  const reason=document.getElementById('eco-reason').value||'Modification admin';
+  if(!amount){toast('Entrez un montant','danger');return;}
+  const p=players.find(x=>x.name===name); if(!p) return;
+  const old=p.coins;
+  if(action==='add') p.coins+=amount;
+  else if(action==='remove') p.coins=Math.max(0,p.coins-amount);
+  else p.coins=amount;
+  transactions.unshift({name,action,amount,reason,from:old,to:p.coins,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})});
+  addConsoleLine('cmd',`💰 ECO ${action} ${name} ${old}→${p.coins}`);
+  toast(`${name}: ${old.toLocaleString()} → ${p.coins.toLocaleString()} coins`,'success');
+  renderEcoPlayer(); renderEcoTransactions();
+}
+function renderEcoTransactions(){
+  const box=document.getElementById('eco-transactions');
+  if(!transactions.length){box.innerHTML='<div style="text-align:center;color:var(--text2);padding:20px;font-family:\'Share Tech Mono\',monospace;font-size:12px">Aucune transaction</div>';return;}
+  box.innerHTML=transactions.slice(0,8).map(t=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(26,40,64,.5)"><div><div style="font-size:13px;font-weight:600">${t.name}</div><div style="font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace">${t.reason}</div></div><div style="text-align:right"><div style="font-family:'Orbitron',monospace;font-size:13px;color:${t.action==='remove'?'var(--red)':'var(--green)'}"> ${t.action==='add'?'+':t.action==='remove'?'-':'='} ${t.amount.toLocaleString()}</div><div style="font-size:10px;color:var(--text2);font-family:'Share Tech Mono',monospace">${t.time}</div></div></div>`).join('');
+}
+
+// ======= TICKETS =======
+function renderTickets(){
+  const box=document.getElementById('tickets-list');
+  const pColors={high:'var(--red)',medium:'var(--yellow)',low:'var(--green)'};
+  box.innerHTML=tickets.map((t,i)=>`<div class="ticket-card" onclick="openTicket(${i})"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div><div style="font-family:'Orbitron',monospace;font-size:12px;color:var(--text2)">${t.id}</div><div style="font-size:14px;font-weight:700;margin-top:4px">${t.subject}</div></div><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:${pColors[t.priority]}"></div><span class="badge badge-online" style="font-size:10px">${t.status}</span></div></div><div style="font-size:12px;color:var(--text2);font-family:'Share Tech Mono',monospace">👤 ${t.user} — ${t.time}</div></div>`).join('');
+  document.getElementById('nb-tickets').textContent=tickets.filter(t=>t.status==='open').length;
+  document.getElementById('stat-tickets').textContent=tickets.filter(t=>t.status==='open').length;
+}
+function openTicket(i){
+  const t=tickets[i];
+  openModal(`🎫 ${t.id} — ${t.subject}`,`<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-weight:700;color:var(--accent)">${t.user}</span><span style="font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace">${t.time}</span></div><div style="font-size:13px;color:var(--text);line-height:1.6">${t.msg}</div></div><div class="form-group-m"><label class="form-label-m">Réponse</label><textarea class="form-input" id="ticket-reply" placeholder="Votre réponse..."></textarea></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button><button class="btn btn-warning btn-sm" onclick="closeTicket(${i})">✓ Clore</button><button class="btn btn-primary" onclick="replyTicket(${i})">📨 Répondre</button>`);
+}
+function replyTicket(i){ const reply=document.getElementById('ticket-reply').value; if(!reply){toast('Entrez une réponse','danger');return;} addConsoleLine('cmd',`🎫 TICKET REPLY ${tickets[i].id}`); closeModal(); toast(`Réponse envoyée à ${tickets[i].user}`,'success'); }
+function closeTicket(i){ tickets[i].status='closed'; addConsoleLine('ok',`✅ TICKET CLOSE ${tickets[i].id}`); closeModal(); toast(`Ticket ${tickets[i].id} clôturé`,'success'); renderTickets(); }
+
+// ======= SETTINGS =======
+function saveSettings(){ addConsoleLine('ok','💾 SETTINGS SAVED'); toast('Paramètres sauvegardés !','success'); }
+
+// ======= CONSOLE =======
+function initConsole(){
+  const gname = gameData?.name || `Jeu #${gameId}`;
+  const cname = creatorData?.name || 'Admin';
+  addConsoleLine('sys','╔══════════════════════════════════════════════════╗');
+  addConsoleLine('sys','║       NEXUS ADMIN CONSOLE — v2.4.1              ║');
+  addConsoleLine('sys','╚══════════════════════════════════════════════════╝');
+  addConsoleLine('ok',`Connecté au jeu: ${gname} (ID: ${gameId})`);
+  addConsoleLine('ok',`Créateur: ${cname}`);
+  addConsoleLine('info','Tapez "help" pour voir les commandes disponibles.');
+}
+const consoleCommands = {
+  help:()=>{['ban <joueur> <raison>','unban <joueur>','kick <joueur>','warn <joueur>','give <joueur> <coins>','announce <msg>','players','stats','clear'].forEach(c=>addConsoleLine('cmd','  '+c));},
+  players:()=>{ addConsoleLine('info',`Online: ${players.filter(p=>p.status==='Online').length}`); players.filter(p=>p.status==='Online').forEach(p=>addConsoleLine('ok',`  ► ${p.name} [${p.role}]`)); },
+  stats:()=>{ addConsoleLine('info',`Joueurs: ${liveCount} | Bans: ${bans.length} | Tickets: ${tickets.filter(t=>t.status==='open').length}`); },
+  clear:()=>{ document.getElementById('console-body').innerHTML=''; },
+};
+function handleConsoleKey(e){
+  const inp=document.getElementById('console-input');
+  if(e.key==='Enter'){
+    const raw=inp.value.trim(); if(!raw) return;
+    addConsoleLine('cmd',`$ ${raw}`);
+    consoleHistory.push(raw); consoleCursor=consoleHistory.length;
+    const parts=raw.split(' '), cmd=parts[0].toLowerCase();
+    if(consoleCommands[cmd]) consoleCommands[cmd](parts.slice(1));
+    else if(cmd==='ban'&&parts[1]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); if(p){p.status='Banned';bans.push({id:p.id,name:p.name,reason:parts.slice(2).join(' ')||'Console',date:new Date().toISOString().split('T')[0],expires:'7 jours',by:'Console'});addConsoleLine('err',`🚫 ${p.name} banni`);renderBans();renderPlayers();}else addConsoleLine('err',`Introuvable: ${parts[1]}`); }
+    else if(cmd==='unban'&&parts[1]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); if(p){p.status='Offline';const idx=bans.findIndex(b=>b.name===p.name);if(idx>-1)bans.splice(idx,1);addConsoleLine('ok',`✅ ${p.name} débanni`);renderBans();renderPlayers();}else addConsoleLine('err',`Introuvable: ${parts[1]}`); }
+    else if(cmd==='kick'&&parts[1]){ addConsoleLine('warn',`👢 ${parts[1]} expulsé`); }
+    else if(cmd==='warn'&&parts[1]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); if(p){p.warns++;addConsoleLine('warn',`⚠️ ${p.name} averti (${p.warns} warns)`);renderPlayers();}else addConsoleLine('err',`Introuvable: ${parts[1]}`); }
+    else if(cmd==='give'&&parts[1]&&parts[2]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); const amt=parseInt(parts[2]); if(p&&amt>0){p.coins+=amt;addConsoleLine('ok',`💰 +${amt} → ${p.name}`);renderEcoPlayer();}else addConsoleLine('err','Joueur ou montant invalide'); }
+    else if(cmd==='announce'&&parts.length>1){ const msg=parts.slice(1).join(' '); announcements.unshift({title:'Console',msg,type:'info',target:'Tous',time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}); addConsoleLine('sys',`📢 "${msg}"`); renderAnnHistory(); }
+    else addConsoleLine('err',`Commande inconnue: "${cmd}" — tapez "help"`);
+    inp.value=''; document.getElementById('console-body').scrollTop=9999;
+  }
+  else if(e.key==='ArrowUp'){ if(consoleCursor>0){consoleCursor--;inp.value=consoleHistory[consoleCursor]||'';} e.preventDefault(); }
+  else if(e.key==='ArrowDown'){ consoleCursor<consoleHistory.length-1?inp.value=consoleHistory[++consoleCursor]||'':(consoleCursor=consoleHistory.length,inp.value=''); e.preventDefault(); }
+}
+function addConsoleLine(type,msg){ const body=document.getElementById('console-body'); if(!body) return; const now=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); const div=document.createElement('div'); div.className='clog'; div.innerHTML=`<span class="t">[${now}]</span><span class="${type}">${msg}</span>`; body.appendChild(div); body.scrollTop=body.scrollHeight; }
+function clearConsole(){ document.getElementById('console-body').innerHTML=''; }
+function consoleHelp(){ consoleCommands.help(); }
+
+// ======= ANALYTICS =======
+function renderAnalyticsCharts(){
+  const days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  renderBar('chart-players','chart-labels',[180,210,195,247,230,260,247],days,'var(--blue)','joueurs');
+  renderBar('chart-revenue','chart-rev-labels',[320,420,380,510,445,600,520],days,'var(--green)','R$');
+}
+function renderBar(chartId,labelId,data,labels,color,unit){
+  const chart=document.getElementById(chartId); if(!chart) return;
+  const max=Math.max(...data);
+  chart.innerHTML=data.map(v=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%"><div style="width:100%;display:flex;align-items:flex-end;justify-content:center;height:160px"><div title="${v} ${unit}" style="width:80%;border-radius:4px 4px 0 0;background:${color};opacity:.8;height:${Math.round(v/max*100)}%;min-height:4px;cursor:pointer" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.8'"></div></div></div>`).join('');
+  const lbl=document.getElementById(labelId); if(lbl) lbl.innerHTML=labels.map(d=>`<span>${d}</span>`).join('');
+}
+function refreshAnalytics(){ renderAnalyticsCharts(); toast('Analytics actualisées','success',2000); }
+
+// ======= LOGOUT =======
+function doLogout(){
+  openModal('🚪 Déconnexion',`<p style="color:var(--text)">Êtes-vous sûr de vouloir vous déconnecter ?</p>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-danger" onclick="doLogoutConfirm()">🚪 Déconnecter</button>`);
+}
+function doLogoutConfirm(){
+  closeModal();
+  const ap=document.getElementById('admin-panel');
+  ap.style.opacity='0';
+  setTimeout(()=>{
+    ap.classList.remove('visible','fadein'); ap.style.opacity=''; ap.style.display='none';
+    gameData=null; creatorData=null;
+    const lp=document.getElementById('login-page');
+    lp.style.display='flex'; lp.classList.remove('closing');
+    document.getElementById('inp-gameid').value='';
+    document.getElementById('inp-robloxname').value='';
+    document.getElementById('inp-pw').value='';
+    document.getElementById('login-btn').disabled=false;
+    document.getElementById('login-btn').textContent='🔓 Accéder au Panel';
+    document.getElementById('login-error').classList.remove('show');
+    document.getElementById('game-preview').style.display='none';
+    document.getElementById('creator-section').style.display='none';
+  },400);
+}
+</script>
+</body>
+</html>
