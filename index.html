@@ -34,7 +34,6 @@ body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;min-h
 #login-page.closing .login-box{animation:loginOut .6s ease forwards;}
 @keyframes loginOut{to{opacity:0;transform:scale(.95) translateY(-30px)}}
 
-/* Game preview */
 #game-preview{display:none;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.15);border-radius:10px;padding:14px;margin-bottom:16px;}
 .game-preview-inner{display:flex;align-items:center;gap:12px;}
 .game-thumb{width:60px;height:60px;border-radius:8px;object-fit:cover;flex-shrink:0;}
@@ -44,12 +43,9 @@ body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;min-h
 .game-id-disp{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);margin-top:2px;}
 .game-stats-row{display:flex;gap:10px;margin-top:6px;}
 .game-stat{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);}
-
-/* Badge jeu vérifié */
 .game-owner-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,255,157,.1);border:1px solid rgba(0,255,157,.25);border-radius:20px;padding:2px 8px;font-size:10px;color:var(--green);font-family:'Share Tech Mono',monospace;margin-top:5px;}
 .game-not-owner{display:inline-flex;align-items:center;gap:4px;background:rgba(255,184,0,.08);border:1px solid rgba(255,184,0,.2);border-radius:20px;padding:2px 8px;font-size:10px;color:var(--yellow);font-family:'Share Tech Mono',monospace;margin-top:5px;}
 
-/* Creator section */
 #creator-section{display:none;background:rgba(168,85,247,.05);border:1px solid rgba(168,85,247,.15);border-radius:10px;padding:14px;margin-bottom:16px;}
 .creator-inner{display:flex;align-items:center;gap:12px;}
 .creator-avatar{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid rgba(168,85,247,.3);flex-shrink:0;}
@@ -60,7 +56,6 @@ body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;min-h
 .creator-id{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);}
 .verified-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:2px 8px;font-size:10px;color:var(--accent);font-family:'Share Tech Mono',monospace;margin-top:4px;}
 
-/* Loading state */
 #lookup-loading{display:none;text-align:center;padding:12px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2);margin-bottom:16px;}
 .loading-dots::after{content:'...';animation:dots 1.2s steps(4,end) infinite;}
 @keyframes dots{0%,20%{content:'.'}40%{content:'..'}60%,100%{content:'...'}}
@@ -158,6 +153,21 @@ body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;min-h
 .btn-sm{padding:6px 12px;font-size:11px;}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;}
 
+/* Vraies stats du jeu - cartes spéciales */
+.real-stats-banner{background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(168,85,247,.05));border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:20px;}
+.real-game-cover{width:90px;height:90px;border-radius:10px;object-fit:cover;border:2px solid rgba(0,212,255,.3);flex-shrink:0;}
+.real-game-cover-ph{width:90px;height:90px;border-radius:10px;background:rgba(0,212,255,.08);border:2px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;}
+.real-game-info{flex:1;}
+.real-game-title{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--accent);letter-spacing:2px;margin-bottom:4px;}
+.real-game-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);margin-bottom:10px;}
+.real-game-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.real-tag{font-family:'Share Tech Mono',monospace;font-size:10px;padding:3px 10px;border-radius:20px;border:1px solid;}
+.real-tag.green{color:var(--green);border-color:rgba(0,255,157,.3);background:rgba(0,255,157,.08);}
+.real-tag.blue{color:var(--accent);border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.08);}
+.real-tag.purple{color:var(--purple);border-color:rgba(168,85,247,.3);background:rgba(168,85,247,.08);}
+.real-refresh-info{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);display:flex;align-items:center;gap:6px;}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite;display:inline-block;}
+
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
 .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:all .3s;cursor:default;}
 .stat-card:hover{border-color:var(--accent);box-shadow:0 0 20px rgba(0,212,255,.2);transform:translateY(-2px);}
@@ -166,16 +176,21 @@ body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;min-h
 .stat-card.red::before{background:linear-gradient(90deg,transparent,var(--red),transparent);}
 .stat-card.green::before{background:linear-gradient(90deg,transparent,var(--green),transparent);}
 .stat-card.yellow::before{background:linear-gradient(90deg,transparent,var(--yellow),transparent);}
-.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:10px;}
+.stat-card.purple::before{background:linear-gradient(90deg,transparent,var(--purple),transparent);}
+.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.stat-label .live-indicator{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);animation:pulse 2s infinite;}
 .stat-value{font-family:'Orbitron',monospace;font-size:32px;font-weight:700;line-height:1;margin-bottom:8px;}
 .stat-card.blue .stat-value{color:var(--blue);text-shadow:0 0 15px var(--blue);}
 .stat-card.red .stat-value{color:var(--red);text-shadow:0 0 15px var(--red);}
 .stat-card.green .stat-value{color:var(--green);text-shadow:0 0 15px var(--green);}
 .stat-card.yellow .stat-value{color:var(--yellow);text-shadow:0 0 15px var(--yellow);}
+.stat-card.purple .stat-value{color:var(--purple);text-shadow:0 0 15px var(--purple);}
 .stat-change{font-size:12px;display:flex;align-items:center;gap:4px;}
 .stat-change.up{color:var(--green);}
 .stat-change.down{color:var(--red);}
+.stat-change.neutral{color:var(--text2);}
 .stat-icon{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:40px;opacity:.07;}
+.stat-source{position:absolute;bottom:8px;right:12px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--green);opacity:.6;}
 
 .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
 .panel-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2);}
@@ -201,6 +216,7 @@ tr:last-child td{border-bottom:none;}
 .badge-offline{background:rgba(90,122,154,.1);color:var(--text2);border:1px solid var(--border);}
 .badge-muted{background:rgba(255,184,0,.15);color:var(--yellow);border:1px solid rgba(255,184,0,.2);}
 .badge-green{background:rgba(0,255,157,.15);color:var(--green);border:1px solid rgba(0,255,157,.2);}
+.badge-real{background:rgba(0,255,157,.12);color:var(--green);border:1px solid rgba(0,255,157,.25);font-size:9px;padding:2px 6px;}
 
 .search-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
 .search-wrap{position:relative;flex:1;}
@@ -225,10 +241,22 @@ select{background:var(--bg2);border:1px solid var(--border);border-radius:8px;pa
 .activity-icon.purchase{background:rgba(168,85,247,.15);color:var(--purple);}
 .activity-icon.warn{background:rgba(255,184,0,.15);color:var(--yellow);}
 .activity-icon.unban{background:rgba(0,255,157,.15);color:var(--green);}
+.activity-icon.info{background:rgba(0,212,255,.15);color:var(--accent);}
 .activity-content{flex:1;}
 .activity-text{font-size:13px;color:var(--text);line-height:1.4;}
 .activity-text strong{color:var(--accent);}
 .activity-time{font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+
+/* Bloc données réelles dans le panel */
+.real-data-block{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.12);border-radius:10px;padding:16px;margin-bottom:16px;}
+.real-data-title{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.real-data-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.real-data-item{background:rgba(0,0,0,.2);border:1px solid rgba(26,40,64,.8);border-radius:8px;padding:10px 14px;}
+.real-data-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text2);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.real-data-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--accent);}
+.real-data-val.green{color:var(--green);}
+.real-data-val.yellow{color:var(--yellow);}
+.real-data-val.purple{color:var(--purple);}
 
 .console{background:#050810;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .console-header{background:rgba(0,0,0,.3);padding:8px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
@@ -299,6 +327,12 @@ textarea.form-input{resize:vertical;min-height:80px;}
 .toggle input:checked+.toggle-track{background:var(--accent);box-shadow:0 0 10px rgba(0,212,255,.4);}
 .toggle-track::after{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;top:3px;left:3px;transition:all .3s;}
 .toggle input:checked+.toggle-track::after{left:23px;}
+
+/* Skeleton loader */
+.skeleton{background:linear-gradient(90deg,rgba(26,40,64,.5) 25%,rgba(26,40,64,.8) 50%,rgba(26,40,64,.5) 75%);background-size:200% 100%;animation:skeleton-loading 1.5s infinite;}
+@keyframes skeleton-loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-block{border-radius:6px;height:20px;}
+.refreshing{opacity:.6;transition:opacity .3s;}
 </style>
 </head>
 <body>
@@ -322,8 +356,6 @@ textarea.form-input{resize:vertical;min-height:80px;}
           Entrez votre nom Roblox — vos jeux seront trouvés automatiquement.
         </div>
       </div>
-
-      <!-- ÉTAPE 1 : Nom Roblox EN PREMIER -->
       <div class="form-group">
         <label class="form-label"><span class="label-dot purple"></span>Votre Nom Roblox (Créateur)</label>
         <div class="input-wrap">
@@ -332,8 +364,6 @@ textarea.form-input{resize:vertical;min-height:80px;}
         </div>
         <div class="field-hint">Votre nom d'utilisateur Roblox exact — vos jeux seront chargés automatiquement</div>
       </div>
-
-      <!-- Preview créateur -->
       <div id="creator-section">
         <div class="creator-inner">
           <img id="creator-avatar-img" class="creator-avatar" src="" alt="avatar" onerror="this.style.display='none';document.getElementById('creator-avatar-ph').style.display='flex'"/>
@@ -346,8 +376,6 @@ textarea.form-input{resize:vertical;min-height:80px;}
           </div>
         </div>
       </div>
-
-      <!-- ÉTAPE 2 : ID du jeu -->
       <div class="form-group">
         <label class="form-label"><span class="label-dot"></span>ID du Jeu Roblox</label>
         <div class="input-wrap">
@@ -356,11 +384,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
         </div>
         <div class="field-hint">Trouvez l'ID dans l'URL de votre jeu (roblox.com/games/ID/...)</div>
       </div>
-
-      <!-- Loading lookup -->
       <div id="lookup-loading"><span class="loading-dots">Recherche du jeu</span></div>
-
-      <!-- Preview jeu -->
       <div id="game-preview">
         <div class="game-preview-inner">
           <img id="game-thumb-img" class="game-thumb" src="" alt="thumb" onerror="this.style.display='none';document.getElementById('game-thumb-ph').style.display='flex'"/>
@@ -370,16 +394,13 @@ textarea.form-input{resize:vertical;min-height:80px;}
             <div class="game-id-disp" id="gp-id">ID: —</div>
             <div class="game-stats-row">
               <div class="game-stat">👥 <span id="gp-playing">—</span></div>
-              <div class="game-stat">👍 <span id="gp-likes">—</span></div>
+              <div class="game-stat">⭐ <span id="gp-likes">—</span></div>
               <div class="game-stat">🎮 <span id="gp-visits">—</span></div>
             </div>
-            <!-- Badge ownership -->
             <div id="gp-owner-badge"></div>
           </div>
         </div>
       </div>
-
-      <!-- Mot de passe -->
       <div class="form-group" style="margin-top:4px">
         <label class="form-label"><span class="label-dot"></span>Mot de Passe Administrateur</label>
         <div class="input-wrap">
@@ -387,7 +408,6 @@ textarea.form-input{resize:vertical;min-height:80px;}
           <span class="istat" id="st-pw"></span>
         </div>
       </div>
-
       <div class="divider"><div class="div-line"></div><div class="div-text">VÉRIFICATION</div><div class="div-line"></div></div>
       <div class="error-box" id="login-error"><span>⛔</span><span id="error-text">Identifiants incorrects.</span></div>
       <button class="login-btn" id="login-btn" onclick="doLogin()">🔓 Accéder au Panel</button>
@@ -441,8 +461,8 @@ textarea.form-input{resize:vertical;min-height:80px;}
     <div class="sidebar-section">
       <div class="sidebar-section-title">Navigation</div>
       <div class="nav-item active" onclick="goPage('dashboard',this)"><span class="nav-icon">📊</span>Dashboard<span class="nav-badge green">Live</span></div>
-      <div class="nav-item" onclick="goPage('players',this)"><span class="nav-icon">👥</span>Joueurs<span class="nav-badge" id="nb-players">247</span></div>
-      <div class="nav-item" onclick="goPage('bans',this)"><span class="nav-icon">🚫</span>Bans<span class="nav-badge" id="nb-bans">12</span></div>
+      <div class="nav-item" onclick="goPage('players',this)"><span class="nav-icon">👥</span>Joueurs<span class="nav-badge" id="nb-players">0</span></div>
+      <div class="nav-item" onclick="goPage('bans',this)"><span class="nav-icon">🚫</span>Bans<span class="nav-badge" id="nb-bans">0</span></div>
       <div class="nav-item" onclick="goPage('chat',this)"><span class="nav-icon">💬</span>Chat Logs</div>
       <div class="nav-item" onclick="goPage('servers',this)"><span class="nav-icon">🖥️</span>Serveurs</div>
     </div>
@@ -450,7 +470,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
       <div class="sidebar-section-title">Outils</div>
       <div class="nav-item" onclick="goPage('announce',this)"><span class="nav-icon">📢</span>Annonces</div>
       <div class="nav-item" onclick="goPage('economy',this)"><span class="nav-icon">💰</span>Économie</div>
-      <div class="nav-item" onclick="goPage('tickets',this)"><span class="nav-icon">🎫</span>Tickets<span class="nav-badge yellow" id="nb-tickets">5</span></div>
+      <div class="nav-item" onclick="goPage('tickets',this)"><span class="nav-icon">🎫</span>Tickets<span class="nav-badge yellow" id="nb-tickets">0</span></div>
       <div class="nav-item" onclick="goPage('settings',this)"><span class="nav-icon">⚙️</span>Paramètres</div>
     </div>
     <div class="sidebar-section">
@@ -467,25 +487,94 @@ textarea.form-input{resize:vertical;min-height:80px;}
       <div class="page-header">
         <div>
           <div class="page-title">DASHBOARD <span>OVERVIEW</span></div>
-          <div class="page-subtitle" id="dash-sub">Surveillance en temps réel</div>
+          <div class="page-subtitle" id="dash-sub">Chargement des données réelles...</div>
         </div>
         <div style="display:flex;gap:12px;">
-          <button class="btn btn-ghost btn-sm" onclick="refreshDash()">🔄 Actualiser</button>
+          <button class="btn btn-ghost btn-sm" onclick="refreshRealData()">🔄 Actualiser</button>
           <button class="btn btn-primary btn-sm" onclick="openAnnounceModal()">📢 Annonce Globale</button>
         </div>
       </div>
-      <div class="stats-grid">
-        <div class="stat-card blue"><div class="stat-label">Joueurs En Ligne</div><div class="stat-value" id="stat-online">247</div><div class="stat-change up">↑ +18 depuis 1h</div><div class="stat-icon">👥</div></div>
-        <div class="stat-card red"><div class="stat-label">Bans Actifs</div><div class="stat-value" id="stat-bans">12</div><div class="stat-change down">↑ +3 aujourd'hui</div><div class="stat-icon">🚫</div></div>
-        <div class="stat-card green"><div class="stat-label">Revenus Aujourd'hui</div><div class="stat-value">4.2K</div><div class="stat-change up">↑ +12%</div><div class="stat-icon">💎</div></div>
-        <div class="stat-card yellow"><div class="stat-label">Tickets Ouverts</div><div class="stat-value" id="stat-tickets">5</div><div class="stat-change down">↓ -2 depuis hier</div><div class="stat-icon">🎫</div></div>
+
+      <!-- Bannière jeu réel -->
+      <div class="real-stats-banner" id="real-game-banner">
+        <div id="real-game-cover-wrap">
+          <div class="real-game-cover-ph">🎮</div>
+        </div>
+        <div class="real-game-info">
+          <div class="real-game-title" id="real-game-title">Chargement...</div>
+          <div class="real-game-meta" id="real-game-meta">Récupération des données Roblox en cours...</div>
+          <div class="real-game-tags" id="real-game-tags"></div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div class="real-refresh-info"><span class="pulse-dot"></span>Données live</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2);margin-top:4px" id="last-refresh-time">—</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--green);margin-top:4px;opacity:.6">Source: Roblox API</div>
+        </div>
       </div>
+
+      <!-- Stats réelles -->
+      <div class="stats-grid">
+        <div class="stat-card blue">
+          <div class="stat-label"><span class="live-indicator"></span>Joueurs En Ligne</div>
+          <div class="stat-value" id="stat-online">—</div>
+          <div class="stat-change neutral" id="stat-online-sub">Données API Roblox</div>
+          <div class="stat-icon">👥</div>
+          <div class="stat-source">🟢 LIVE</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">Total Visites</div>
+          <div class="stat-value" id="stat-visits">—</div>
+          <div class="stat-change neutral" id="stat-visits-sub">Source: Roblox</div>
+          <div class="stat-icon">🎮</div>
+          <div class="stat-source">🟢 RÉEL</div>
+        </div>
+        <div class="stat-card yellow">
+          <div class="stat-label">Favoris</div>
+          <div class="stat-value" id="stat-favorites">—</div>
+          <div class="stat-change neutral">Joueurs ayant mis en favori</div>
+          <div class="stat-icon">⭐</div>
+          <div class="stat-source">🟢 RÉEL</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-label">Note du Jeu</div>
+          <div class="stat-value" id="stat-rating">—</div>
+          <div class="stat-change neutral" id="stat-rating-sub">—</div>
+          <div class="stat-icon">👍</div>
+          <div class="stat-source">🟢 RÉEL</div>
+        </div>
+      </div>
+
+      <!-- Bloc infos réelles détaillées -->
+      <div class="real-data-block">
+        <div class="real-data-title"><span class="pulse-dot"></span>INFORMATIONS RÉELLES DU JEU — Source: Roblox API</div>
+        <div class="real-data-grid" id="real-data-grid">
+          <div class="real-data-item"><div class="real-data-label">Nom du Jeu</div><div class="real-data-val" id="rd-name">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Créateur</div><div class="real-data-val" id="rd-creator">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Universe ID</div><div class="real-data-val green" id="rd-universe">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Place ID</div><div class="real-data-val green" id="rd-placeid">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Joueurs actifs</div><div class="real-data-val" id="rd-playing">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Visites totales</div><div class="real-data-val yellow" id="rd-visits">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Max joueurs/srv</div><div class="real-data-val" id="rd-maxplayers">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Genre</div><div class="real-data-val purple" id="rd-genre">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Création</div><div class="real-data-val" id="rd-created">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Dernière mise à jour</div><div class="real-data-val" id="rd-updated">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Accès</div><div class="real-data-val" id="rd-access">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Coût d'entrée</div><div class="real-data-val yellow" id="rd-price">—</div></div>
+        </div>
+      </div>
+
       <div class="grid-3-1">
         <div class="panel">
-          <div class="panel-header"><div class="panel-title">👥 Joueurs Récents</div><button class="btn btn-ghost btn-sm" onclick="goPage('players',null)">Voir tout →</button></div>
+          <div class="panel-header">
+            <div class="panel-title">👥 Joueurs (Panel)</div>
+            <button class="btn btn-ghost btn-sm" onclick="goPage('players',null)">Voir tout →</button>
+          </div>
           <div style="overflow-x:auto;"><table><thead><tr><th>Joueur</th><th>Rôle</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="dash-players-table"></tbody></table></div>
         </div>
-        <div class="panel"><div class="panel-header"><div class="panel-title">⚡ Activité</div></div><div class="panel-body"><div class="activity-feed" id="activity-feed"></div></div></div>
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">⚡ Activité</div></div>
+          <div class="panel-body"><div class="activity-feed" id="activity-feed"></div></div>
+        </div>
       </div>
     </div>
 
@@ -592,16 +681,23 @@ textarea.form-input{resize:vertical;min-height:80px;}
 
     <!-- ANALYTICS -->
     <div class="page" id="page-analytics">
-      <div class="page-header"><div><div class="page-title">ANALYTICS <span>AVANCÉES</span></div><div class="page-subtitle">Statistiques détaillées</div></div><button class="btn btn-ghost btn-sm" onclick="refreshAnalytics()">🔄 Actualiser</button></div>
+      <div class="page-header"><div><div class="page-title">ANALYTICS <span>AVANCÉES</span></div><div class="page-subtitle">Statistiques du jeu — données réelles</div></div><button class="btn btn-ghost btn-sm" onclick="refreshAnalytics()">🔄 Actualiser</button></div>
       <div class="stats-grid">
-        <div class="stat-card blue"><div class="stat-label">Total Joueurs</div><div class="stat-value">14,832</div><div class="stat-change up">↑ +234 cette semaine</div><div class="stat-icon">👥</div></div>
-        <div class="stat-card green"><div class="stat-label">Revenus Total</div><div class="stat-value">89K</div><div class="stat-change up">↑ +8% ce mois</div><div class="stat-icon">💎</div></div>
-        <div class="stat-card yellow"><div class="stat-label">Temps Moyen</div><div class="stat-value">42m</div><div class="stat-change up">↑ +3min</div><div class="stat-icon">⏱️</div></div>
-        <div class="stat-card red"><div class="stat-label">Taux de Retour</div><div class="stat-value">68%</div><div class="stat-change up">↑ +2%</div><div class="stat-icon">🔄</div></div>
+        <div class="stat-card blue"><div class="stat-label"><span class="live-indicator"></span>Joueurs actifs</div><div class="stat-value" id="analytics-playing">—</div><div class="stat-change neutral">En ce moment</div><div class="stat-icon">👥</div><div class="stat-source">🟢 LIVE</div></div>
+        <div class="stat-card green"><div class="stat-label">Total Visites</div><div class="stat-value" id="analytics-visits">—</div><div class="stat-change neutral">Cumulatif</div><div class="stat-icon">🎮</div><div class="stat-source">🟢 RÉEL</div></div>
+        <div class="stat-card yellow"><div class="stat-label">Favoris</div><div class="stat-value" id="analytics-favs">—</div><div class="stat-change neutral">Joueurs fidèles</div><div class="stat-icon">⭐</div><div class="stat-source">🟢 RÉEL</div></div>
+        <div class="stat-card purple"><div class="stat-label">Max simultané/srv</div><div class="stat-value" id="analytics-max">—</div><div class="stat-change neutral">Par instance</div><div class="stat-icon">🖥️</div><div class="stat-source">🟢 RÉEL</div></div>
+      </div>
+      <div class="real-data-block">
+        <div class="real-data-title"><span class="pulse-dot"></span>DÉTAILS COMPLETS DU JEU — Roblox API</div>
+        <div class="real-data-grid" id="analytics-grid">
+          <div class="real-data-item"><div class="real-data-label">Description</div><div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text);margin-top:4px;line-height:1.5;max-height:60px;overflow:hidden;text-overflow:ellipsis" id="rd-desc">—</div></div>
+          <div class="real-data-item"><div class="real-data-label">Universes & Places</div><div class="real-data-val green" id="rd-places">—</div></div>
+        </div>
       </div>
       <div class="grid-2">
         <div class="panel"><div class="panel-header"><div class="panel-title">📊 Joueurs (7 jours)</div></div><div class="panel-body"><div id="chart-players" style="height:180px;display:flex;align-items:flex-end;gap:4px;padding:0 4px;"></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2)" id="chart-labels"></div></div></div>
-        <div class="panel"><div class="panel-header"><div class="panel-title">💰 Revenus (7 jours)</div></div><div class="panel-body"><div id="chart-revenue" style="height:180px;display:flex;align-items:flex-end;gap:4px;padding:0 4px;"></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2)" id="chart-rev-labels"></div></div></div>
+        <div class="panel"><div class="panel-header"><div class="panel-title">💰 Visites (7 jours)</div></div><div class="panel-body"><div id="chart-revenue" style="height:180px;display:flex;align-items:flex-end;gap:4px;padding:0 4px;"></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text2)" id="chart-rev-labels"></div></div></div>
       </div>
     </div>
   </div>
@@ -615,97 +711,121 @@ const PROXY = 'https://corsproxy.io/?';
 let gameId = '';
 let gameData = null;
 let creatorData = null;
-let creatorGamesCache = []; // Cache des jeux du créateur
+let creatorGamesCache = [];
 let chatFilterOnly = false;
 let consoleHistory = [], consoleCursor = 0;
 let gameIdTimer = null, creatorTimer = null;
+let realDataInterval = null;
 
 // ======= API ROBLOX =======
+async function rFetch(url) {
+  const res = await fetch(PROXY + encodeURIComponent(url));
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
 
 async function lookupUser(username) {
+  const json = await rFetch('https://users.roblox.com/v1/usernames/users');
+  // POST workaround via corsproxy
   const res = await fetch(PROXY + encodeURIComponent('https://users.roblox.com/v1/usernames/users'), {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({usernames:[username], excludeBannedUsers:false})
   });
-  const json = await res.json();
-  const user = json.data?.[0];
+  const data = await res.json();
+  const user = data.data?.[0];
   if (!user) throw new Error('Utilisateur introuvable');
   let avatarUrl = '';
   try {
-    const avatarRes = await fetch(PROXY + encodeURIComponent(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=true`));
-    const avatarJson = await avatarRes.json();
-    avatarUrl = avatarJson.data?.[0]?.imageUrl || '';
+    const av = await rFetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=true`);
+    avatarUrl = av.data?.[0]?.imageUrl || '';
   } catch(e) {}
   return { id: user.id, name: user.name, displayName: user.displayName, avatarUrl };
 }
 
-// Récupère tous les jeux d'un créateur (universeIds)
 async function fetchCreatorGames(userId) {
   try {
-    const res = await fetch(PROXY + encodeURIComponent(`https://games.roblox.com/v2/users/${userId}/games?sortOrder=Asc&limit=50`));
-    const json = await res.json();
-    // Retourne tableau de { id: universeId, name }
-    return json.data || [];
+    const data = await rFetch(`https://games.roblox.com/v2/users/${userId}/games?sortOrder=Asc&limit=50`);
+    return data.data || [];
   } catch(e) { return []; }
 }
 
-// Résout un placeId → universeId
 async function placeToUniverse(placeId) {
-  const res = await fetch(PROXY + encodeURIComponent(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`));
-  if (!res.ok) throw new Error('Jeu introuvable');
-  const data = await res.json();
+  const data = await rFetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`);
+  if (!data.universeId) throw new Error('Jeu introuvable');
   return data.universeId;
 }
 
-// Récupère détails + thumbnail d'un universeId
-async function fetchGameDetails(universeId) {
-  const gameRes = await fetch(PROXY + encodeURIComponent(`https://games.roblox.com/v1/games?universeIds=${universeId}`));
-  const gameJson = await gameRes.json();
+// Récupère TOUTES les données réelles du jeu
+async function fetchFullGameData(universeId) {
+  // Données principales
+  const gameJson = await rFetch(`https://games.roblox.com/v1/games?universeIds=${universeId}`);
   const game = gameJson.data?.[0];
   if (!game) throw new Error('Données introuvables');
+
+  // Thumbnail
   let thumbUrl = '';
   try {
-    const tRes = await fetch(PROXY + encodeURIComponent(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=150x150&format=Png&isCircular=false`));
-    const tJson = await tRes.json();
+    const tJson = await rFetch(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=150x150&format=Png&isCircular=false`);
     thumbUrl = tJson.data?.[0]?.imageUrl || '';
   } catch(e) {}
+
+  // Thumbnail grande taille (pour la bannière)
+  let thumbLgUrl = '';
+  try {
+    const tLg = await rFetch(`https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds=${universeId}&size=768x432&format=Png&isCircular=false`);
+    thumbLgUrl = tLg.data?.[0]?.thumbnails?.[0]?.imageUrl || thumbUrl;
+  } catch(e) { thumbLgUrl = thumbUrl; }
+
+  // Votes (likes/dislikes)
+  let votes = {upVotes:0, downVotes:0};
+  try {
+    const vJson = await rFetch(`https://games.roblox.com/v1/games/votes?universeIds=${universeId}`);
+    votes = vJson.data?.[0] || votes;
+  } catch(e) {}
+
   return {
     universeId,
+    placeId: game.rootPlaceId,
     name: game.name,
+    description: game.description || '',
+    creator: game.creator?.name || '—',
+    creatorType: game.creator?.type || 'User',
     playing: game.playing ?? 0,
     visits: game.visits ?? 0,
-    likes: game.favoritedCount ?? 0,
-    thumbUrl
+    favoritedCount: game.favoritedCount ?? 0,
+    maxPlayers: game.maxPlayers ?? 0,
+    genre: game.genre || '—',
+    created: game.created,
+    updated: game.updated,
+    isPublic: game.isPublic,
+    isFriendsOnly: game.isFriendsOnly,
+    price: game.price ?? 0,
+    upVotes: votes.upVotes ?? 0,
+    downVotes: votes.downVotes ?? 0,
+    thumbUrl,
+    thumbLgUrl
   };
 }
 
-// ======= AFFICHER PREVIEW JEU =======
+// ======= AFFICHER PREVIEW JEU (LOGIN) =======
 function showGamePreview(data, placeId, isOwner) {
   gameData = data;
   const imgEl = document.getElementById('game-thumb-img');
   const phEl = document.getElementById('game-thumb-ph');
-  if (data.thumbUrl) {
-    imgEl.src = data.thumbUrl;
-    imgEl.style.display = '';
-    phEl.style.display = 'none';
-  } else {
-    imgEl.style.display = 'none';
-    phEl.style.display = 'flex';
-  }
+  if (data.thumbUrl) { imgEl.src = data.thumbUrl; imgEl.style.display = ''; phEl.style.display = 'none'; }
+  else { imgEl.style.display = 'none'; phEl.style.display = 'flex'; }
+
   document.getElementById('gp-name').textContent = data.name;
   document.getElementById('gp-id').textContent = `ID: ${placeId} · Universe: ${data.universeId}`;
   document.getElementById('gp-playing').textContent = data.playing.toLocaleString();
-  document.getElementById('gp-likes').textContent = data.likes.toLocaleString();
-  document.getElementById('gp-visits').textContent = data.visits > 1000 ? (data.visits/1000).toFixed(1)+'K' : data.visits;
+  document.getElementById('gp-likes').textContent = data.favoritedCount.toLocaleString();
+  document.getElementById('gp-visits').textContent = data.visits > 999999 ? (data.visits/1000000).toFixed(1)+'M' : data.visits > 999 ? (data.visits/1000).toFixed(1)+'K' : data.visits;
 
-  // Badge propriété
   const badgeEl = document.getElementById('gp-owner-badge');
-  if (isOwner) {
-    badgeEl.innerHTML = '<span class="game-owner-badge">✓ Votre jeu — Propriété vérifiée</span>';
-  } else {
-    badgeEl.innerHTML = '<span class="game-not-owner">⚠ Jeu trouvé — Propriété non confirmée</span>';
-  }
+  badgeEl.innerHTML = isOwner
+    ? '<span class="game-owner-badge">✓ Votre jeu — Propriété vérifiée</span>'
+    : '<span class="game-not-owner">⚠ Jeu trouvé — Propriété non confirmée</span>';
 
   document.getElementById('game-preview').style.display = 'block';
   document.getElementById('st-id').textContent = isOwner ? '✅' : '⚠️';
@@ -715,35 +835,138 @@ function showGamePreview(data, placeId, isOwner) {
   document.getElementById('inp-gameid').classList.add('success');
 }
 
-// ======= HANDLER NOM CRÉATEUR (EN PREMIER) =======
+// ======= AFFICHER DONNÉES RÉELLES DANS LE PANEL =======
+function renderRealGameData(data) {
+  if (!data) return;
+
+  const fmtNum = n => {
+    if (n >= 1000000000) return (n/1000000000).toFixed(1)+'B';
+    if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+    if (n >= 1000) return (n/1000).toFixed(1)+'K';
+    return n.toLocaleString();
+  };
+
+  const fmtDate = s => {
+    if (!s) return '—';
+    try { return new Date(s).toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'}); }
+    catch(e) { return s; }
+  };
+
+  const totalVotes = data.upVotes + data.downVotes;
+  const ratingPct = totalVotes > 0 ? Math.round(data.upVotes / totalVotes * 100) : 0;
+
+  // Stats en haut
+  const soEl = document.getElementById('stat-online'); if(soEl) soEl.textContent = fmtNum(data.playing);
+  const svEl = document.getElementById('stat-visits'); if(svEl) svEl.textContent = fmtNum(data.visits);
+  const sfEl = document.getElementById('stat-favorites'); if(sfEl) sfEl.textContent = fmtNum(data.favoritedCount);
+  const srEl = document.getElementById('stat-rating'); if(srEl) srEl.textContent = ratingPct + '%';
+  const srSub = document.getElementById('stat-rating-sub'); if(srSub) srSub.textContent = `👍 ${fmtNum(data.upVotes)} / 👎 ${fmtNum(data.downVotes)}`;
+
+  const soSub = document.getElementById('stat-online-sub');
+  if (soSub) soSub.innerHTML = `<span class="stat-change up">🟢 Joueurs en ligne maintenant</span>`;
+
+  // Bannière principale
+  const coverWrap = document.getElementById('real-game-cover-wrap');
+  if (coverWrap) {
+    if (data.thumbLgUrl || data.thumbUrl) {
+      coverWrap.innerHTML = `<img class="real-game-cover" src="${data.thumbLgUrl || data.thumbUrl}" alt="cover" onerror="this.parentNode.innerHTML='<div class=real-game-cover-ph>🎮</div>'"/>`;
+    }
+  }
+
+  const titleEl = document.getElementById('real-game-title');
+  if (titleEl) titleEl.textContent = data.name;
+
+  const metaEl = document.getElementById('real-game-meta');
+  if (metaEl) metaEl.textContent = `Par ${data.creator} · ${fmtNum(data.playing)} joueurs actifs · ${fmtNum(data.visits)} visites totales`;
+
+  const tagsEl = document.getElementById('real-game-tags');
+  if (tagsEl) {
+    const tags = [];
+    if (data.isPublic) tags.push({label:'Public', cls:'green'});
+    else if (data.isFriendsOnly) tags.push({label:'Amis seulement', cls:'yellow'});
+    else tags.push({label:'Privé', cls:'yellow'});
+    if (data.genre && data.genre !== '—') tags.push({label: data.genre, cls:'blue'});
+    if (data.price > 0) tags.push({label:`${data.price} R$`, cls:'purple'});
+    else tags.push({label:'Gratuit', cls:'green'});
+    tags.push({label:`Max ${data.maxPlayers}/serveur`, cls:'blue'});
+    tagsEl.innerHTML = tags.map(t => `<span class="real-tag ${t.cls}">${t.label}</span>`).join('');
+  }
+
+  const lrEl = document.getElementById('last-refresh-time');
+  if (lrEl) lrEl.textContent = 'Mis à jour: ' + new Date().toLocaleTimeString('fr-FR');
+
+  // Bloc détails
+  const fields = {
+    'rd-name': data.name,
+    'rd-creator': data.creator + (data.creatorType === 'Group' ? ' (Groupe)' : ''),
+    'rd-universe': data.universeId,
+    'rd-placeid': data.placeId || gameId,
+    'rd-playing': data.playing.toLocaleString() + ' joueurs',
+    'rd-visits': fmtNum(data.visits),
+    'rd-maxplayers': data.maxPlayers + ' joueurs',
+    'rd-genre': data.genre,
+    'rd-created': fmtDate(data.created),
+    'rd-updated': fmtDate(data.updated),
+    'rd-access': data.isPublic ? '🌐 Public' : data.isFriendsOnly ? '👥 Amis' : '🔒 Privé',
+    'rd-price': data.price > 0 ? data.price + ' R$' : '🆓 Gratuit',
+  };
+  Object.entries(fields).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val || '—';
+  });
+
+  // Analytics
+  const apEl = document.getElementById('analytics-playing'); if(apEl) apEl.textContent = fmtNum(data.playing);
+  const avEl = document.getElementById('analytics-visits'); if(avEl) avEl.textContent = fmtNum(data.visits);
+  const afEl = document.getElementById('analytics-favs'); if(afEl) afEl.textContent = fmtNum(data.favoritedCount);
+  const amEl = document.getElementById('analytics-max'); if(amEl) amEl.textContent = data.maxPlayers;
+  const rdDesc = document.getElementById('rd-desc'); if(rdDesc) rdDesc.textContent = data.description || 'Aucune description';
+  const rdPl = document.getElementById('rd-places'); if(rdPl) rdPl.textContent = `Universe ${data.universeId}`;
+
+  // Console
+  addConsoleLine('ok', `📊 DONNÉES RÉELLES — ${data.name}`);
+  addConsoleLine('info', `   👥 En ligne: ${data.playing} | 🎮 Visites: ${fmtNum(data.visits)} | ⭐ Favoris: ${fmtNum(data.favoritedCount)}`);
+  addConsoleLine('info', `   👍 ${fmtNum(data.upVotes)} likes (${ratingPct}%) | 🕐 MAJ: ${fmtDate(data.updated)}`);
+
+  // Mise à jour topbar
+  const gnEl = document.getElementById('disp-gamename'); if(gnEl) gnEl.textContent = data.name;
+
+  // Charts analytics avec données relatives
+  renderAnalyticsCharts(data);
+}
+
+// ======= REFRESH DONNÉES RÉELLES =======
+async function refreshRealData() {
+  if (!gameData?.universeId) return;
+  addConsoleLine('sys', '🔄 Actualisation des données Roblox...');
+  try {
+    const fresh = await fetchFullGameData(gameData.universeId);
+    gameData = { ...gameData, ...fresh };
+    renderRealGameData(gameData);
+    toast('Données actualisées depuis Roblox', 'success', 2500);
+    addConsoleLine('ok', '✅ Données actualisées');
+  } catch(e) {
+    addConsoleLine('err', `❌ Erreur refresh: ${e.message}`);
+    toast('Erreur actualisation', 'danger');
+  }
+}
+
+// ======= HANDLER NOM CRÉATEUR =======
 function onCreatorInput(val) {
   clearTimeout(creatorTimer);
   const clean = val.trim();
   document.getElementById('st-creator').textContent = '';
   document.getElementById('st-creator').classList.remove('show');
   creatorGamesCache = [];
-
-  if (!clean || clean.length < 3) {
-    document.getElementById('creator-section').style.display = 'none';
-    return;
-  }
-
+  if (!clean || clean.length < 3) { document.getElementById('creator-section').style.display = 'none'; return; }
   creatorTimer = setTimeout(async () => {
     try {
       const data = await lookupUser(clean);
       creatorData = data;
-
-      // Afficher l'avatar
       const imgEl = document.getElementById('creator-avatar-img');
       const phEl = document.getElementById('creator-avatar-ph');
-      if (data.avatarUrl) {
-        imgEl.src = data.avatarUrl;
-        imgEl.style.display = '';
-        phEl.style.display = 'none';
-      } else {
-        imgEl.style.display = 'none';
-        phEl.style.display = 'flex';
-      }
+      if (data.avatarUrl) { imgEl.src = data.avatarUrl; imgEl.style.display = ''; phEl.style.display = 'none'; }
+      else { imgEl.style.display = 'none'; phEl.style.display = 'flex'; }
       document.getElementById('cp-name').textContent = data.displayName || data.name;
       document.getElementById('cp-id').textContent = `@${data.name} · ID: ${data.id}`;
       document.getElementById('creator-section').style.display = 'block';
@@ -751,19 +974,11 @@ function onCreatorInput(val) {
       document.getElementById('st-creator').style.color = 'var(--green)';
       document.getElementById('st-creator').classList.add('show');
       document.getElementById('inp-robloxname').classList.remove('error');
-
-      // Charger les jeux du créateur en arrière-plan
       creatorGamesCache = await fetchCreatorGames(data.id);
-
-      // Si un gameId est déjà saisi → re-déclencher la vérification
       const currentGid = document.getElementById('inp-gameid').value.trim();
-      if (currentGid && /^\d{6,}$/.test(currentGid)) {
-        triggerGameLookup(currentGid);
-      }
-
+      if (currentGid && /^\d{6,}$/.test(currentGid)) triggerGameLookup(currentGid);
     } catch(e) {
-      creatorData = null;
-      creatorGamesCache = [];
+      creatorData = null; creatorGamesCache = [];
       document.getElementById('creator-section').style.display = 'none';
       document.getElementById('st-creator').textContent = '❌';
       document.getElementById('st-creator').style.color = 'var(--red)';
@@ -778,40 +993,25 @@ function onGameIdInput(val) {
   const clean = val.trim();
   document.getElementById('st-id').textContent = '';
   document.getElementById('st-id').classList.remove('show');
-
   if (!clean || !/^\d{6,}$/.test(clean)) {
     document.getElementById('game-preview').style.display = 'none';
     document.getElementById('lookup-loading').style.display = 'none';
-    gameData = null;
-    return;
+    gameData = null; return;
   }
-
   gameIdTimer = setTimeout(() => triggerGameLookup(clean), 800);
 }
 
-// ======= LOGIQUE PRINCIPALE : résolution du jeu =======
 async function triggerGameLookup(placeId) {
   document.getElementById('lookup-loading').style.display = 'block';
   document.getElementById('game-preview').style.display = 'none';
   document.getElementById('st-id').textContent = '';
   document.getElementById('st-id').classList.remove('show');
-
   try {
-    // 1. Résoudre placeId → universeId
     const universeId = await placeToUniverse(placeId);
-
-    // 2. Vérifier si ce jeu appartient au créateur (prioritaire)
     let isOwner = false;
-    if (creatorGamesCache.length > 0) {
-      isOwner = creatorGamesCache.some(g => g.id === universeId);
-    }
-
-    // 3. Récupérer les détails du jeu
-    const details = await fetchGameDetails(universeId);
-
-    // 4. Afficher avec badge propriété
+    if (creatorGamesCache.length > 0) isOwner = creatorGamesCache.some(g => g.id === universeId);
+    const details = await fetchFullGameData(universeId);
     showGamePreview(details, placeId, isOwner);
-
   } catch(e) {
     gameData = null;
     document.getElementById('game-preview').style.display = 'none';
@@ -821,7 +1021,6 @@ async function triggerGameLookup(placeId) {
     document.getElementById('inp-gameid').classList.add('error');
     document.getElementById('inp-gameid').classList.remove('success');
   }
-
   document.getElementById('lookup-loading').style.display = 'none';
 }
 
@@ -834,30 +1033,12 @@ function doLogin(){
   const err = document.getElementById('login-error');
   const errTxt = document.getElementById('error-text');
   err.classList.remove('show');
-
-  if (!creatorName) {
-    errTxt.textContent = 'Entrez votre nom Roblox.';
-    err.classList.add('show');
-    document.getElementById('inp-robloxname').classList.add('error');
-    return;
-  }
-  if (!gid || !/^\d{6,}$/.test(gid)) {
-    errTxt.textContent = 'ID de jeu invalide (minimum 6 chiffres).';
-    err.classList.add('show');
-    document.getElementById('inp-gameid').classList.add('error');
-    return;
-  }
-  if (pw !== PASS) {
-    errTxt.textContent = 'Mot de passe incorrect. Accès refusé.';
-    err.classList.add('show');
-    document.getElementById('inp-pw').classList.add('error');
-    return;
-  }
-
+  if (!creatorName) { errTxt.textContent = 'Entrez votre nom Roblox.'; err.classList.add('show'); document.getElementById('inp-robloxname').classList.add('error'); return; }
+  if (!gid || !/^\d{6,}$/.test(gid)) { errTxt.textContent = 'ID de jeu invalide.'; err.classList.add('show'); document.getElementById('inp-gameid').classList.add('error'); return; }
+  if (pw !== PASS) { errTxt.textContent = 'Mot de passe incorrect.'; err.classList.add('show'); document.getElementById('inp-pw').classList.add('error'); return; }
   btn.disabled = true;
   btn.textContent = '⚡ Connexion en cours...';
   gameId = gid;
-
   setTimeout(() => {
     document.getElementById('login-page').classList.add('closing');
     setTimeout(() => {
@@ -884,30 +1065,26 @@ for (let i = 0; i < 35; i++) {
   pc.appendChild(p);
 }
 
-// ======= DATA =======
+// ======= DATA PANEL (gestion locale) =======
 const players = [
   {id:'#4821047',name:'XRaider99',role:'Admin',status:'Online',last:'Il y a 2 min',color:'#a855f7,#7c3aed',coins:12400,warns:0},
   {id:'#7392841',name:'NovaKiller_X',role:'VIP',status:'Online',last:'Il y a 5 min',color:'#00d4ff,#0099cc',coins:8320,warns:1},
   {id:'#1039482',name:'ShadowHack22',role:'Joueur',status:'Banned',last:'Il y a 1h',color:'#ff3e6c,#cc0033',coins:0,warns:5},
   {id:'#5548201',name:'GlitchTamer',role:'Mod',status:'Online',last:'Il y a 12 min',color:'#ffb800,#cc9000',coins:5100,warns:0},
   {id:'#8831204',name:'PixelStorm',role:'Joueur',status:'Offline',last:'Il y a 2h',color:'#00ff9d,#00cc7a',coins:2340,warns:2},
-  {id:'#3312048',name:'DarkNinja77',role:'Joueur',status:'Online',last:'Il y a 8 min',color:'#a855f7,#7c3aed',coins:760,warns:0},
 ];
 const bans = [
   {id:'#1039482',name:'ShadowHack22',reason:'Triche — Aimbot détecté',date:'2026-03-05',expires:'Permanent',by:'XRaider99'},
-  {id:'#2201944',name:'HackMaster_X',reason:'Exploit — Duplication coins',date:'2026-03-04',expires:'2026-03-14',by:'GlitchTamer'},
 ];
 const chatLogs = [
   {user:'XRaider99',msg:'Bienvenue sur le serveur !',time:'14:32',flagged:false},
   {user:'ShadowHack22',msg:'achète des hacks ici → discord.gg/xxx',time:'14:33',flagged:true},
   {user:'NovaKiller_X',msg:'GG les gars belle partie',time:'14:34',flagged:false},
-  {user:'GrieferLOL',msg:'@$#! vous tous les admins',time:'14:36',flagged:true},
 ];
 const servers = [
   {id:'SRV-001',region:'EU-West',players:48,max:50,ping:12,status:'online'},
   {id:'SRV-002',region:'US-East',players:32,max:50,ping:87,status:'online'},
   {id:'SRV-003',region:'AS-South',players:19,max:50,ping:142,status:'online'},
-  {id:'SRV-004',region:'EU-East',players:0,max:50,ping:0,status:'offline'},
 ];
 const tickets = [
   {id:'TK-001',user:'PixelStorm',subject:'Coins non reçus après achat',priority:'high',status:'open',time:'Il y a 1h',msg:"J'ai acheté le pack 1000 coins mais je n'ai rien reçu."},
@@ -915,17 +1092,17 @@ const tickets = [
 ];
 const transactions = [], announcements = [];
 const activityLog = [
-  {type:'join',text:'<strong>XRaider99</strong> a rejoint le serveur',time:'il y a 2 min'},
-  {type:'ban',text:'<strong>ShadowHack22</strong> banni — Triche',time:'il y a 1h'},
-  {type:'purchase',text:"<strong>NovaKiller_X</strong> a acheté VIP Pass",time:'il y a 2h'},
+  {type:'info',text:'<strong>Données Roblox</strong> chargées avec succès',time:'maintenant'},
+  {type:'join',text:'Panel <strong>Nexus Admin</strong> initialisé',time:'il y a 1 min'},
 ];
 
 // ======= INIT PANEL =======
-function initPanel(){
+async function initPanel(){
   const gname = gameData?.name || `Jeu #${gameId}`;
   document.getElementById('disp-gameid').textContent = gameId;
   document.getElementById('disp-gamename').textContent = gname;
-  document.getElementById('dash-sub').textContent = `Surveillance en temps réel — ${gname}`;
+  document.getElementById('dash-sub').textContent = `Données Roblox en temps réel — ${gname}`;
+
   if (gameData) {
     const sg = document.getElementById('sidebar-game-box');
     sg.style.display = 'block';
@@ -941,47 +1118,38 @@ function initPanel(){
     if (creatorData.avatarUrl) img.src = creatorData.avatarUrl;
     document.getElementById('topbar-creator-name').textContent = creatorData.displayName || creatorData.name;
   }
+
+  // Afficher immédiatement les données déjà récupérées
+  if (gameData) renderRealGameData(gameData);
+
   renderDashPlayers(); renderActivity(); renderPlayers(); renderBans();
   renderChat(); renderServers(); renderTickets(); renderEcoPlayer();
-  renderEcoTransactions(); renderAnnHistory(); renderAnalyticsCharts();
+  renderEcoTransactions(); renderAnnHistory();
   initConsole();
+
+  document.getElementById('nb-players').textContent = players.length;
+  document.getElementById('nb-bans').textContent = bans.length;
+  document.getElementById('nb-tickets').textContent = tickets.filter(t=>t.status==='open').length;
+
   setInterval(updateClock, 1000); updateClock();
-  setInterval(liveStats, 3000);
+
+  // Auto-refresh données Roblox toutes les 60 secondes
+  realDataInterval = setInterval(async () => {
+    if (gameData?.universeId) {
+      try {
+        const fresh = await fetchFullGameData(gameData.universeId);
+        gameData = { ...gameData, ...fresh };
+        renderRealGameData(gameData);
+        addConsoleLine('ok', '🔄 Auto-refresh OK');
+      } catch(e) { addConsoleLine('warn', `⚠️ Auto-refresh échoué: ${e.message}`); }
+    }
+  }, 60000);
 }
 
-function updateClock(){
-  const t = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  const el = document.getElementById('clock'); if(el) el.textContent = t;
-}
-let liveCount = 247;
-function liveStats(){
-  liveCount = Math.max(200, Math.min(300, liveCount+(Math.floor(Math.random()*5)-2)));
-  const el = document.getElementById('stat-online'); if(el) el.textContent = liveCount;
-}
-
-function goPage(name, navEl){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const pg = document.getElementById('page-'+name);
-  if(pg) pg.classList.add('active');
-  if(navEl) navEl.classList.add('active');
-}
-
-function toast(msg, type='info', duration=3500){
-  const icons = {success:'✅',danger:'❌',warning:'⚠️',info:'ℹ️'};
-  const t = document.createElement('div');
-  t.className = `toast ${type}`;
-  t.innerHTML = `<span style="font-size:18px">${icons[type]||'ℹ️'}</span><span style="font-size:13px">${msg}</span>`;
-  document.getElementById('toasts').appendChild(t);
-  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 350); }, duration);
-}
-
-function openModal(title, body, footer){
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-body').innerHTML = body;
-  document.getElementById('modal-footer').innerHTML = footer;
-  document.getElementById('modal-overlay').classList.add('open');
-}
+function updateClock(){ const t = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); const el = document.getElementById('clock'); if(el) el.textContent = t; }
+function goPage(name, navEl){ document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); const pg = document.getElementById('page-'+name); if(pg) pg.classList.add('active'); if(navEl) navEl.classList.add('active'); }
+function toast(msg, type='info', duration=3500){ const icons = {success:'✅',danger:'❌',warning:'⚠️',info:'ℹ️'}; const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<span style="font-size:18px">${icons[type]||'ℹ️'}</span><span style="font-size:13px">${msg}</span>`; document.getElementById('toasts').appendChild(t); setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 350); }, duration); }
+function openModal(title, body, footer){ document.getElementById('modal-title').textContent = title; document.getElementById('modal-body').innerHTML = body; document.getElementById('modal-footer').innerHTML = footer; document.getElementById('modal-overlay').classList.add('open'); }
 function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
 document.getElementById('modal-overlay').addEventListener('click', e => { if(e.target===document.getElementById('modal-overlay')) closeModal(); });
 
@@ -989,36 +1157,18 @@ function roleBadge(r){ const m={Admin:'badge-admin',Mod:'badge-mod',VIP:'badge-v
 function statusBadge(s){ if(s==='Online') return '<span class="badge badge-online">● Online</span>'; if(s==='Banned') return '<span class="badge badge-banned">⛔ Banni</span>'; return '<span class="badge badge-offline">○ Offline</span>'; }
 function avatar(name, color){ return `<div class="player-avatar" style="background:linear-gradient(135deg,${color})">${name.substring(0,2).toUpperCase()}</div>`; }
 
-function renderDashPlayers(){
-  const tb = document.getElementById('dash-players-table');
-  tb.innerHTML = players.slice(0,5).map(p=>`<tr><td><div class="player-mini">${avatar(p.name,p.color)}<div><div class="player-name">${p.name}</div><div class="player-id">${p.id}</div></div></div></td><td>${roleBadge(p.role)}</td><td>${statusBadge(p.status)}</td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm" onclick="viewPlayer('${p.name}')">🔍</button>${p.status!=='Banned'?`<button class="btn btn-danger btn-sm" onclick="openBanModal('${p.name}')">🚫</button>`:`<button class="btn btn-success btn-sm" onclick="unbanPlayer('${p.name}')">✓</button>`}</div></td></tr>`).join('');
-}
-function renderActivity(){
-  document.getElementById('activity-feed').innerHTML = activityLog.map(a=>`<div class="activity-item"><div class="activity-icon ${a.type}">${a.type==='join'?'→':a.type==='ban'?'⛔':a.type==='purchase'?'💎':'⚠️'}</div><div class="activity-content"><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div></div>`).join('');
-}
-function refreshDash(){ renderDashPlayers(); renderActivity(); toast('Dashboard actualisé','success',2000); }
+function renderDashPlayers(){ const tb = document.getElementById('dash-players-table'); tb.innerHTML = players.slice(0,5).map(p=>`<tr><td><div class="player-mini">${avatar(p.name,p.color)}<div><div class="player-name">${p.name}</div><div class="player-id">${p.id}</div></div></div></td><td>${roleBadge(p.role)}</td><td>${statusBadge(p.status)}</td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm" onclick="viewPlayer('${p.name}')">🔍</button>${p.status!=='Banned'?`<button class="btn btn-danger btn-sm" onclick="openBanModal('${p.name}')">🚫</button>`:`<button class="btn btn-success btn-sm" onclick="unbanPlayer('${p.name}')">✓</button>`}</div></td></tr>`).join(''); }
+function renderActivity(){ document.getElementById('activity-feed').innerHTML = activityLog.slice(0,6).map(a=>`<div class="activity-item"><div class="activity-icon ${a.type}">${a.type==='join'?'→':a.type==='ban'?'⛔':a.type==='purchase'?'💎':a.type==='info'?'ℹ️':'⚠️'}</div><div class="activity-content"><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div></div>`).join(''); }
 
-function renderPlayers(filtered){
-  const data = filtered || players;
-  document.getElementById('players-count').textContent = `${data.length} joueur(s)`;
-  document.getElementById('players-table').innerHTML = data.map(p=>`<tr><td><div class="player-mini">${avatar(p.name,p.color)}<div><div class="player-name">${p.name}</div><div class="player-id">${p.id}</div></div></div></td><td>${roleBadge(p.role)}</td><td>${statusBadge(p.status)}</td><td style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">${p.last}</td><td><div style="display:flex;gap:5px;flex-wrap:wrap;"><button class="btn btn-ghost btn-sm" onclick="viewPlayer('${p.name}')">🔍 Voir</button>${p.status!=='Banned'?`<button class="btn btn-warning btn-sm" onclick="openWarnModal('${p.name}')">⚠️ Warn</button><button class="btn btn-ghost btn-sm" onclick="kickPlayer('${p.name}')">👢 Kick</button><button class="btn btn-danger btn-sm" onclick="openBanModal('${p.name}')">🚫 Ban</button>`:`<button class="btn btn-success btn-sm" onclick="unbanPlayer('${p.name}')">✓ Débannir</button>`}<button class="btn btn-purple btn-sm" onclick="openRoleModal('${p.name}')">👑</button></div></td></tr>`).join('');
-}
-function filterPlayers(q){
-  const rf = document.getElementById('player-filter').value;
-  const sf = document.getElementById('status-filter').value;
-  renderPlayers(players.filter(p=>(!q||p.name.toLowerCase().includes(q.toLowerCase())||p.id.includes(q))&&(!rf||p.role===rf)&&(!sf||p.status===sf)));
-}
-function viewPlayer(name){
-  const p = players.find(x=>x.name===name); if(!p) return;
-  openModal(`👤 ${p.name}`,`<div style="display:grid;gap:12px;"><div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">${avatar(p.name,p.color)}<div><div style="font-family:'Orbitron',monospace;font-size:16px;color:var(--accent)">${p.name}</div><div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">${p.id}</div></div><div style="margin-left:auto">${roleBadge(p.role)}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">STATUT</div>${statusBadge(p.status)}</div><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">COINS</div><div style="font-family:'Orbitron',monospace;font-size:18px;color:var(--yellow)">${p.coins.toLocaleString()}</div></div><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">WARNINGS</div><div style="font-family:'Orbitron',monospace;font-size:18px;color:${p.warns>0?'var(--red)':'var(--green)'}">${p.warns}</div></div><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">CONNEXION</div><div style="font-size:12px;font-family:'Share Tech Mono',monospace">${p.last}</div></div></div></div>`,
-    `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>${p.status!=='Banned'?`<button class="btn btn-danger" onclick="closeModal();openBanModal('${p.name}')">🚫 Ban</button>`:`<button class="btn btn-success" onclick="closeModal();unbanPlayer('${p.name}')">✓ Débannir</button>`}`);
-}
+function renderPlayers(filtered){ const data=filtered||players; document.getElementById('players-count').textContent=`${data.length} joueur(s)`; document.getElementById('players-table').innerHTML=data.map(p=>`<tr><td><div class="player-mini">${avatar(p.name,p.color)}<div><div class="player-name">${p.name}</div><div class="player-id">${p.id}</div></div></div></td><td>${roleBadge(p.role)}</td><td>${statusBadge(p.status)}</td><td style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">${p.last}</td><td><div style="display:flex;gap:5px;flex-wrap:wrap;"><button class="btn btn-ghost btn-sm" onclick="viewPlayer('${p.name}')">🔍 Voir</button>${p.status!=='Banned'?`<button class="btn btn-warning btn-sm" onclick="openWarnModal('${p.name}')">⚠️ Warn</button><button class="btn btn-ghost btn-sm" onclick="kickPlayer('${p.name}')">👢 Kick</button><button class="btn btn-danger btn-sm" onclick="openBanModal('${p.name}')">🚫 Ban</button>`:`<button class="btn btn-success btn-sm" onclick="unbanPlayer('${p.name}')">✓ Débannir</button>`}<button class="btn btn-purple btn-sm" onclick="openRoleModal('${p.name}')">👑</button></div></td></tr>`).join(''); }
+function filterPlayers(q){ const rf=document.getElementById('player-filter').value; const sf=document.getElementById('status-filter').value; renderPlayers(players.filter(p=>(!q||p.name.toLowerCase().includes(q.toLowerCase())||p.id.includes(q))&&(!rf||p.role===rf)&&(!sf||p.status===sf))); }
+function viewPlayer(name){ const p=players.find(x=>x.name===name); if(!p) return; openModal(`👤 ${p.name}`,`<div style="display:grid;gap:12px;"><div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">${avatar(p.name,p.color)}<div><div style="font-family:'Orbitron',monospace;font-size:16px;color:var(--accent)">${p.name}</div><div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text2)">${p.id}</div></div><div style="margin-left:auto">${roleBadge(p.role)}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">STATUT</div>${statusBadge(p.status)}</div><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">COINS</div><div style="font-family:'Orbitron',monospace;font-size:18px;color:var(--yellow)">${p.coins.toLocaleString()}</div></div><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">WARNINGS</div><div style="font-family:'Orbitron',monospace;font-size:18px;color:${p.warns>0?'var(--red)':'var(--green)'}">${p.warns}</div></div><div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;"><div style="font-size:10px;color:var(--text2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:6px">CONNEXION</div><div style="font-size:12px;font-family:'Share Tech Mono',monospace">${p.last}</div></div></div></div>`,`<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>${p.status!=='Banned'?`<button class="btn btn-danger" onclick="closeModal();openBanModal('${p.name}')">🚫 Ban</button>`:`<button class="btn btn-success" onclick="closeModal();unbanPlayer('${p.name}')">✓ Débannir</button>`}`); }
 function openWarnModal(name){ openModal(`⚠️ Avertir ${name}`,`<div class="form-group-m"><label class="form-label-m">Raison</label><input type="text" class="form-input" id="warn-reason" placeholder="Comportement inapproprié..."/></div>`,`<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-warning" onclick="doWarn('${name}')">⚠️ Avertir</button>`); }
 function doWarn(name){ const reason=document.getElementById('warn-reason').value||'Comportement inapproprié'; const p=players.find(x=>x.name===name); if(p) p.warns++; activityLog.unshift({type:'warn',text:`<strong>${name}</strong> averti — ${reason}`,time:"à l'instant"}); addConsoleLine('warn',`⚠️ WARN ${name} → "${reason}"`); closeModal(); toast(`${name} averti`,'warning'); renderDashPlayers(); renderActivity(); renderPlayers(); }
 function openBanModal(name){ openModal(`🚫 ${name?'Bannir '+name:'Nouveau Ban'}`,`${!name?`<div class="form-group-m"><label class="form-label-m">Nom du joueur</label><input type="text" class="form-input" id="ban-target"/></div>`:''}<div class="form-group-m"><label class="form-label-m">Raison</label><input type="text" class="form-input" id="ban-reason" placeholder="Triche, exploit..."/></div><div class="form-group-m"><label class="form-label-m">Durée</label><select class="form-select" id="ban-duration"><option>1 jour</option><option>3 jours</option><option selected>7 jours</option><option>30 jours</option><option>Permanent</option></select></div>`,`<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-danger" onclick="doBan('${name||''}')">🚫 Bannir</button>`); }
-function doBan(name){ const target=name||document.getElementById('ban-target')?.value; if(!target){toast('Entrez un nom','danger');return;} const reason=document.getElementById('ban-reason').value||'Non spécifié'; const dur=document.getElementById('ban-duration').value; const p=players.find(x=>x.name===target); if(p) p.status='Banned'; bans.unshift({id:p?.id||'#???',name:target,reason,date:new Date().toISOString().split('T')[0],expires:dur,by:'Admin'}); activityLog.unshift({type:'ban',text:`<strong>${target}</strong> banni — ${reason}`,time:"à l'instant"}); addConsoleLine('err',`🚫 BAN ${target} | "${reason}" | ${dur}`); const nb=document.getElementById('nb-bans'); if(nb) nb.textContent=bans.length; const sb=document.getElementById('stat-bans'); if(sb) sb.textContent=bans.length; closeModal(); toast(`${target} banni (${dur})`,'danger'); renderDashPlayers(); renderActivity(); renderPlayers(); renderBans(); }
+function doBan(name){ const target=name||document.getElementById('ban-target')?.value; if(!target){toast('Entrez un nom','danger');return;} const reason=document.getElementById('ban-reason').value||'Non spécifié'; const dur=document.getElementById('ban-duration').value; const p=players.find(x=>x.name===target); if(p) p.status='Banned'; bans.unshift({id:p?.id||'#???',name:target,reason,date:new Date().toISOString().split('T')[0],expires:dur,by:'Admin'}); activityLog.unshift({type:'ban',text:`<strong>${target}</strong> banni — ${reason}`,time:"à l'instant"}); addConsoleLine('err',`🚫 BAN ${target} | "${reason}" | ${dur}`); document.getElementById('nb-bans').textContent=bans.length; closeModal(); toast(`${target} banni (${dur})`,'danger'); renderDashPlayers(); renderActivity(); renderPlayers(); renderBans(); }
 function unbanPlayer(name){ openModal(`✅ Débannir ${name}`,`<p style="color:var(--text)">Êtes-vous sûr de vouloir débannir <strong style="color:var(--accent)">${name}</strong> ?</p>`,`<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-success" onclick="doUnban('${name}')">✅ Débannir</button>`); }
-function doUnban(name){ const p=players.find(x=>x.name===name); if(p) p.status='Offline'; const idx=bans.findIndex(b=>b.name===name); if(idx>-1) bans.splice(idx,1); activityLog.unshift({type:'unban',text:`<strong>${name}</strong> débanni`,time:"à l'instant"}); addConsoleLine('ok',`✅ UNBAN ${name}`); const nb=document.getElementById('nb-bans'); if(nb) nb.textContent=bans.length; const sb=document.getElementById('stat-bans'); if(sb) sb.textContent=bans.length; closeModal(); toast(`${name} débanni !`,'success'); renderDashPlayers(); renderActivity(); renderPlayers(); renderBans(); }
+function doUnban(name){ const p=players.find(x=>x.name===name); if(p) p.status='Offline'; const idx=bans.findIndex(b=>b.name===name); if(idx>-1) bans.splice(idx,1); activityLog.unshift({type:'unban',text:`<strong>${name}</strong> débanni`,time:"à l'instant"}); addConsoleLine('ok',`✅ UNBAN ${name}`); document.getElementById('nb-bans').textContent=bans.length; closeModal(); toast(`${name} débanni !`,'success'); renderDashPlayers(); renderActivity(); renderPlayers(); renderBans(); }
 function kickPlayer(name){ activityLog.unshift({type:'kick',text:`<strong>${name}</strong> expulsé du serveur`,time:"à l'instant"}); addConsoleLine('warn',`👢 KICK ${name}`); toast(`${name} expulsé`,'warning'); renderActivity(); }
 function openRoleModal(name){ const p=players.find(x=>x.name===name); if(!p) return; openModal(`👑 Changer rôle — ${name}`,`<div class="form-group-m"><label class="form-label-m">Nouveau rôle</label><select class="form-select" id="new-role"><option ${p.role==='Joueur'?'selected':''}>Joueur</option><option ${p.role==='VIP'?'selected':''}>VIP</option><option ${p.role==='Mod'?'selected':''}>Mod</option><option ${p.role==='Admin'?'selected':''}>Admin</option></select></div>`,`<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-purple" onclick="doRoleChange('${name}')">👑 Appliquer</button>`); }
 function doRoleChange(name){ const p=players.find(x=>x.name===name); if(!p) return; const nr=document.getElementById('new-role').value; p.role=nr; addConsoleLine('cmd',`👑 ROLE ${name} → ${nr}`); closeModal(); toast(`Rôle de ${name} changé en ${nr}`,'success'); renderDashPlayers(); renderPlayers(); }
@@ -1026,15 +1176,14 @@ function openAddPlayerModal(){ openModal('➕ Ajouter un Joueur',`<div class="fo
 function doAddPlayer(){ const name=document.getElementById('add-name').value; if(!name){toast('Entrez un nom','danger');return;} const role=document.getElementById('add-role').value; players.push({id:`#${Math.floor(Math.random()*9000000+1000000)}`,name,role,status:'Offline',last:'Jamais',color:'#00d4ff,#0099cc',coins:0,warns:0}); document.getElementById('nb-players').textContent=players.length; addConsoleLine('ok',`➕ ADDPLAYER ${name} [${role}]`); closeModal(); toast(`${name} ajouté`,'success'); renderPlayers(); renderDashPlayers(); }
 
 function renderBans(){ document.getElementById('bans-count').textContent=`${bans.length} ban(s) actif(s)`; const list=document.getElementById('bans-list'); if(!bans.length){list.innerHTML='<div style="text-align:center;color:var(--text2);padding:30px;font-family:\'Share Tech Mono\',monospace">Aucun ban actif</div>';return;} list.innerHTML=bans.map(b=>`<div class="ban-row"><div style="width:42px;height:42px;border-radius:8px;background:rgba(255,62,108,.15);display:flex;align-items:center;justify-content:center;font-size:20px">🚫</div><div style="flex:1"><div style="font-weight:700">${b.name} <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2)">${b.id}</span></div><div style="font-size:12px;color:var(--red)">${b.reason}</div><div style="font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace;margin-top:3px">Banni le ${b.date} — Expire: ${b.expires} — Par: ${b.by}</div></div><button class="btn btn-success btn-sm" onclick="unbanPlayer('${b.name}')">✓ Débannir</button></div>`).join(''); }
-
 function renderChat(){ const box=document.getElementById('chat-logs'); const data=chatFilterOnly?chatLogs.filter(c=>c.flagged):chatLogs; box.innerHTML=data.map((c,i)=>`<div class="chat-line ${c.flagged?'flagged':'normal'}"><span style="color:var(--text2);min-width:45px">${c.time}</span><span style="color:var(--accent);min-width:120px;font-weight:700">${c.user}</span><span style="flex:1;${c.flagged?'color:var(--red)':''}">${c.flagged?'🚩 ':''} ${c.msg}</span>${c.flagged?`<button class="btn btn-danger btn-sm" onclick="deleteChatMsg(${i})">🗑️</button>`:''}</div>`).join(''); }
 function toggleChatFilter(){ chatFilterOnly=!chatFilterOnly; toast(chatFilterOnly?'Signalés seulement':'Tous les messages','info',2000); renderChat(); }
 function deleteChatMsg(i){ chatLogs.splice(i,1); toast('Message supprimé','success',2000); renderChat(); }
 function clearChat(){ openModal('🗑️ Effacer Logs',`<p style="color:var(--text)">Supprimer tous les logs ?</p>`,`<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-danger" onclick="chatLogs.length=0;renderChat();closeModal();toast('Logs effacés','info')">🗑️ Effacer</button>`); }
 
-function renderServers(){ const grid=document.getElementById('servers-grid'); grid.innerHTML=servers.map(s=>{ const pct=Math.round(s.players/s.max*100); const col=pct>80?'var(--red)':pct>50?'var(--yellow)':'var(--green)'; const sb=s.status==='online'?'<span class="badge badge-online">● Online</span>':s.status==='offline'?'<span class="badge badge-offline">○ Offline</span>':'<span class="badge badge-muted">🔧 Maintenance</span>'; return `<div class="server-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--accent)">${s.id}</div>${sb}</div><div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-family:'Share Tech Mono',monospace">🌍 ${s.region}</div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>👥 ${s.players}/${s.max}</span><span style="font-family:'Share Tech Mono',monospace;color:${s.ping>100?'var(--red)':'var(--green)'}">📡 ${s.ping}ms</span></div><div class="cap-bar"><div class="cap-fill" style="width:${pct}%;background:${col}"></div></div><div style="display:flex;gap:6px;margin-top:14px">${s.status==='online'?`<button class="btn btn-ghost btn-sm" style="flex:1" onclick="serverAction('${s.id}','restart')">🔄 Restart</button><button class="btn btn-danger btn-sm" style="flex:1" onclick="serverAction('${s.id}','stop')">⏹ Stop</button>`:`<button class="btn btn-success btn-sm" style="flex:1" onclick="serverAction('${s.id}','start')">▶ Démarrer</button>`}</div></div>`; }).join(''); }
+function renderServers(){ const grid=document.getElementById('servers-grid'); const maxPl=gameData?.maxPlayers||50; grid.innerHTML=servers.map(s=>{ const pct=Math.round(s.players/s.max*100); const col=pct>80?'var(--red)':pct>50?'var(--yellow)':'var(--green)'; const sb=s.status==='online'?'<span class="badge badge-online">● Online</span>':s.status==='offline'?'<span class="badge badge-offline">○ Offline</span>':'<span class="badge badge-muted">🔧 Maintenance</span>'; return `<div class="server-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--accent)">${s.id}</div>${sb}</div><div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-family:'Share Tech Mono',monospace">🌍 ${s.region}</div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>👥 ${s.players}/${s.max}</span><span style="font-family:'Share Tech Mono',monospace;color:${s.ping>100?'var(--red)':'var(--green)'}">📡 ${s.ping}ms</span></div><div class="cap-bar"><div class="cap-fill" style="width:${pct}%;background:${col}"></div></div><div style="display:flex;gap:6px;margin-top:14px">${s.status==='online'?`<button class="btn btn-ghost btn-sm" style="flex:1" onclick="serverAction('${s.id}','restart')">🔄 Restart</button><button class="btn btn-danger btn-sm" style="flex:1" onclick="serverAction('${s.id}','stop')">⏹ Stop</button>`:`<button class="btn btn-success btn-sm" style="flex:1" onclick="serverAction('${s.id}','start')">▶ Démarrer</button>`}</div></div>`; }).join(''); }
 function serverAction(id,action){ const s=servers.find(x=>x.id===id); if(!s) return; if(action==='stop'){s.status='offline';s.players=0;s.ping=0;} if(action==='start'){s.status='online';s.ping=Math.floor(Math.random()*100+10);} if(action==='restart'){s.players=0;} addConsoleLine(action==='stop'?'err':action==='start'?'ok':'warn',`⚙️ SERVER ${action.toUpperCase()} ${id}`); toast(`Serveur ${id} : ${action}`,'info'); renderServers(); }
-function openNewServerModal(){ openModal('➕ Nouveau Serveur',`<div class="form-group-m"><label class="form-label-m">Région</label><select class="form-select" id="new-srv-region"><option>EU-West</option><option>EU-East</option><option>US-East</option><option>US-West</option><option>AS-South</option></select></div><div class="form-group-m"><label class="form-label-m">Capacité max</label><input type="number" class="form-input" id="new-srv-max" value="50"/></div>`,`<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-success" onclick="doNewServer()">➕ Créer</button>`); }
+function openNewServerModal(){ openModal('➕ Nouveau Serveur',`<div class="form-group-m"><label class="form-label-m">Région</label><select class="form-select" id="new-srv-region"><option>EU-West</option><option>EU-East</option><option>US-East</option><option>US-West</option><option>AS-South</option></select></div><div class="form-group-m"><label class="form-label-m">Capacité max</label><input type="number" class="form-input" id="new-srv-max" value="${gameData?.maxPlayers||50}"/></div>`,`<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-success" onclick="doNewServer()">➕ Créer</button>`); }
 function doNewServer(){ const region=document.getElementById('new-srv-region').value; const max=parseInt(document.getElementById('new-srv-max').value)||50; const id=`SRV-00${servers.length+1}`; servers.push({id,region,players:0,max,ping:Math.floor(Math.random()*100+20),status:'online'}); addConsoleLine('ok',`➕ SERVER CREATED ${id}`); closeModal(); toast(`Serveur ${id} créé`,'success'); renderServers(); }
 
 function renderAnnHistory(){ const box=document.getElementById('ann-history'); if(!announcements.length){box.innerHTML='<div style="text-align:center;color:var(--text2);padding:20px;font-family:\'Share Tech Mono\',monospace;font-size:12px">Aucune annonce</div>';return;} box.innerHTML=announcements.map(a=>`<div class="ann-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-weight:700;font-size:13px">${a.title}</span><span style="font-size:10px;color:var(--text2);font-family:'Share Tech Mono',monospace">${a.time}</span></div><div style="font-size:12px;color:var(--text2);margin-bottom:8px">${a.msg}</div><span class="badge" style="font-size:10px;background:rgba(0,212,255,.1);color:var(--accent);border:1px solid rgba(0,212,255,.2)">${a.type}</span></div>`).join(''); }
@@ -1048,31 +1197,98 @@ function renderEcoPlayer(){ const sel=document.getElementById('eco-player'); sel
 function applyEconomy(){ const name=document.getElementById('eco-player').value; const action=document.getElementById('eco-action').value; const amount=parseInt(document.getElementById('eco-amount').value)||0; const reason=document.getElementById('eco-reason').value||'Modification admin'; if(!amount){toast('Entrez un montant','danger');return;} const p=players.find(x=>x.name===name); if(!p) return; const old=p.coins; if(action==='add') p.coins+=amount; else if(action==='remove') p.coins=Math.max(0,p.coins-amount); else p.coins=amount; transactions.unshift({name,action,amount,reason,from:old,to:p.coins,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}); addConsoleLine('cmd',`💰 ECO ${action} ${name} ${old}→${p.coins}`); toast(`${name}: ${old.toLocaleString()} → ${p.coins.toLocaleString()} coins`,'success'); renderEcoPlayer(); renderEcoTransactions(); }
 function renderEcoTransactions(){ const box=document.getElementById('eco-transactions'); if(!transactions.length){box.innerHTML='<div style="text-align:center;color:var(--text2);padding:20px;font-family:\'Share Tech Mono\',monospace;font-size:12px">Aucune transaction</div>';return;} box.innerHTML=transactions.slice(0,8).map(t=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(26,40,64,.5)"><div><div style="font-size:13px;font-weight:600">${t.name}</div><div style="font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace">${t.reason}</div></div><div style="text-align:right"><div style="font-family:'Orbitron',monospace;font-size:13px;color:${t.action==='remove'?'var(--red)':'var(--green)'}"> ${t.action==='add'?'+':t.action==='remove'?'-':'='} ${t.amount.toLocaleString()}</div><div style="font-size:10px;color:var(--text2);font-family:'Share Tech Mono',monospace">${t.time}</div></div></div>`).join(''); }
 
-function renderTickets(){ const box=document.getElementById('tickets-list'); const pColors={high:'var(--red)',medium:'var(--yellow)',low:'var(--green)'}; box.innerHTML=tickets.map((t,i)=>`<div class="ticket-card" onclick="openTicket(${i})"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div><div style="font-family:'Orbitron',monospace;font-size:12px;color:var(--text2)">${t.id}</div><div style="font-size:14px;font-weight:700;margin-top:4px">${t.subject}</div></div><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:${pColors[t.priority]}"></div><span class="badge badge-online" style="font-size:10px">${t.status}</span></div></div><div style="font-size:12px;color:var(--text2);font-family:'Share Tech Mono',monospace">👤 ${t.user} — ${t.time}</div></div>`).join(''); document.getElementById('nb-tickets').textContent=tickets.filter(t=>t.status==='open').length; document.getElementById('stat-tickets').textContent=tickets.filter(t=>t.status==='open').length; }
+function renderTickets(){ const box=document.getElementById('tickets-list'); const pColors={high:'var(--red)',medium:'var(--yellow)',low:'var(--green)'}; box.innerHTML=tickets.map((t,i)=>`<div class="ticket-card" onclick="openTicket(${i})"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div><div style="font-family:'Orbitron',monospace;font-size:12px;color:var(--text2)">${t.id}</div><div style="font-size:14px;font-weight:700;margin-top:4px">${t.subject}</div></div><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:${pColors[t.priority]}"></div><span class="badge badge-online" style="font-size:10px">${t.status}</span></div></div><div style="font-size:12px;color:var(--text2);font-family:'Share Tech Mono',monospace">👤 ${t.user} — ${t.time}</div></div>`).join(''); document.getElementById('nb-tickets').textContent=tickets.filter(t=>t.status==='open').length; }
 function openTicket(i){ const t=tickets[i]; openModal(`🎫 ${t.id} — ${t.subject}`,`<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-weight:700;color:var(--accent)">${t.user}</span><span style="font-size:11px;color:var(--text2);font-family:'Share Tech Mono',monospace">${t.time}</span></div><div style="font-size:13px;color:var(--text);line-height:1.6">${t.msg}</div></div><div class="form-group-m"><label class="form-label-m">Réponse</label><textarea class="form-input" id="ticket-reply" placeholder="Votre réponse..."></textarea></div>`,`<button class="btn btn-ghost" onclick="closeModal()">Fermer</button><button class="btn btn-warning btn-sm" onclick="closeTicket(${i})">✓ Clore</button><button class="btn btn-primary" onclick="replyTicket(${i})">📨 Répondre</button>`); }
 function replyTicket(i){ const reply=document.getElementById('ticket-reply').value; if(!reply){toast('Entrez une réponse','danger');return;} addConsoleLine('cmd',`🎫 TICKET REPLY ${tickets[i].id}`); closeModal(); toast(`Réponse envoyée à ${tickets[i].user}`,'success'); }
 function closeTicket(i){ tickets[i].status='closed'; addConsoleLine('ok',`✅ TICKET CLOSE ${tickets[i].id}`); closeModal(); toast(`Ticket ${tickets[i].id} clôturé`,'success'); renderTickets(); }
 
 function saveSettings(){ addConsoleLine('ok','💾 SETTINGS SAVED'); toast('Paramètres sauvegardés !','success'); }
 
-function initConsole(){ const gname=gameData?.name||`Jeu #${gameId}`; const cname=creatorData?.name||'Admin'; addConsoleLine('sys','╔══════════════════════════════════════════════════╗'); addConsoleLine('sys','║       NEXUS ADMIN CONSOLE — v2.4.1              ║'); addConsoleLine('sys','╚══════════════════════════════════════════════════╝'); addConsoleLine('ok',`Connecté au jeu: ${gname} (ID: ${gameId})`); addConsoleLine('ok',`Créateur: ${cname}`); addConsoleLine('info','Tapez "help" pour voir les commandes disponibles.'); }
+function initConsole(){
+  const gname=gameData?.name||`Jeu #${gameId}`;
+  const cname=creatorData?.name||'Admin';
+  addConsoleLine('sys','╔══════════════════════════════════════════════════╗');
+  addConsoleLine('sys','║       NEXUS ADMIN CONSOLE — v2.4.1              ║');
+  addConsoleLine('sys','╚══════════════════════════════════════════════════╝');
+  addConsoleLine('ok',`✅ Connecté: ${gname} (PlaceID: ${gameId})`);
+  addConsoleLine('ok',`✅ Créateur: ${cname}`);
+  if (gameData) {
+    addConsoleLine('info',`📊 Joueurs: ${gameData.playing} | Visites: ${gameData.visits?.toLocaleString()} | Favoris: ${gameData.favoritedCount?.toLocaleString()}`);
+  }
+  addConsoleLine('info','Tapez "help" pour voir les commandes disponibles.');
+  addConsoleLine('sys','Auto-refresh données Roblox: toutes les 60 secondes');
+}
+
 const consoleCommands = {
-  help:()=>{['ban <joueur> <raison>','unban <joueur>','kick <joueur>','warn <joueur>','give <joueur> <coins>','announce <msg>','players','stats','clear'].forEach(c=>addConsoleLine('cmd','  '+c));},
+  help:()=>{ ['ban <joueur> <raison>','unban <joueur>','kick <joueur>','warn <joueur>','give <joueur> <coins>','announce <msg>','players','stats','gameinfo','refresh','clear'].forEach(c=>addConsoleLine('cmd','  '+c)); },
   players:()=>{ addConsoleLine('info',`Online: ${players.filter(p=>p.status==='Online').length}`); players.filter(p=>p.status==='Online').forEach(p=>addConsoleLine('ok',`  ► ${p.name} [${p.role}]`)); },
-  stats:()=>{ addConsoleLine('info',`Joueurs: ${liveCount} | Bans: ${bans.length} | Tickets: ${tickets.filter(t=>t.status==='open').length}`); },
+  stats:()=>{ addConsoleLine('info',`Joueurs actifs (Roblox): ${gameData?.playing||'—'}`); addConsoleLine('info',`Visites (Roblox): ${gameData?.visits?.toLocaleString()||'—'}`); addConsoleLine('info',`Favoris (Roblox): ${gameData?.favoritedCount?.toLocaleString()||'—'}`); },
+  gameinfo:()=>{ if(!gameData){addConsoleLine('err','Aucune donnée');return;} addConsoleLine('sys',`🎮 ${gameData.name}`); addConsoleLine('info',`  Créateur: ${gameData.creator} | Genre: ${gameData.genre}`); addConsoleLine('info',`  Universe: ${gameData.universeId} | Place: ${gameData.placeId||gameId}`); addConsoleLine('info',`  Max/srv: ${gameData.maxPlayers} | Accès: ${gameData.isPublic?'Public':'Privé'}`); },
+  refresh:()=>{ refreshRealData(); },
   clear:()=>{ document.getElementById('console-body').innerHTML=''; },
 };
-function handleConsoleKey(e){ const inp=document.getElementById('console-input'); if(e.key==='Enter'){ const raw=inp.value.trim(); if(!raw) return; addConsoleLine('cmd',`$ ${raw}`); consoleHistory.push(raw); consoleCursor=consoleHistory.length; const parts=raw.split(' '), cmd=parts[0].toLowerCase(); if(consoleCommands[cmd]) consoleCommands[cmd](parts.slice(1)); else if(cmd==='ban'&&parts[1]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); if(p){p.status='Banned';bans.push({id:p.id,name:p.name,reason:parts.slice(2).join(' ')||'Console',date:new Date().toISOString().split('T')[0],expires:'7 jours',by:'Console'});addConsoleLine('err',`🚫 ${p.name} banni`);renderBans();renderPlayers();}else addConsoleLine('err',`Introuvable: ${parts[1]}`); } else if(cmd==='unban'&&parts[1]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); if(p){p.status='Offline';const idx=bans.findIndex(b=>b.name===p.name);if(idx>-1)bans.splice(idx,1);addConsoleLine('ok',`✅ ${p.name} débanni`);renderBans();renderPlayers();}else addConsoleLine('err',`Introuvable: ${parts[1]}`); } else if(cmd==='kick'&&parts[1]){ addConsoleLine('warn',`👢 ${parts[1]} expulsé`); } else if(cmd==='warn'&&parts[1]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); if(p){p.warns++;addConsoleLine('warn',`⚠️ ${p.name} averti (${p.warns} warns)`);renderPlayers();}else addConsoleLine('err',`Introuvable: ${parts[1]}`); } else if(cmd==='give'&&parts[1]&&parts[2]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); const amt=parseInt(parts[2]); if(p&&amt>0){p.coins+=amt;addConsoleLine('ok',`💰 +${amt} → ${p.name}`);renderEcoPlayer();}else addConsoleLine('err','Joueur ou montant invalide'); } else if(cmd==='announce'&&parts.length>1){ const msg=parts.slice(1).join(' '); announcements.unshift({title:'Console',msg,type:'info',target:'Tous',time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}); addConsoleLine('sys',`📢 "${msg}"`); renderAnnHistory(); } else addConsoleLine('err',`Commande inconnue: "${cmd}" — tapez "help"`); inp.value=''; document.getElementById('console-body').scrollTop=9999; } else if(e.key==='ArrowUp'){ if(consoleCursor>0){consoleCursor--;inp.value=consoleHistory[consoleCursor]||'';} e.preventDefault(); } else if(e.key==='ArrowDown'){ consoleCursor<consoleHistory.length-1?inp.value=consoleHistory[++consoleCursor]||'':(consoleCursor=consoleHistory.length,inp.value=''); e.preventDefault(); } }
+
+function handleConsoleKey(e){
+  const inp=document.getElementById('console-input');
+  if(e.key==='Enter'){
+    const raw=inp.value.trim(); if(!raw) return;
+    addConsoleLine('cmd',`$ ${raw}`);
+    consoleHistory.push(raw); consoleCursor=consoleHistory.length;
+    const parts=raw.split(' '), cmd=parts[0].toLowerCase();
+    if(consoleCommands[cmd]) consoleCommands[cmd](parts.slice(1));
+    else if(cmd==='ban'&&parts[1]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); if(p){p.status='Banned';bans.push({id:p.id,name:p.name,reason:parts.slice(2).join(' ')||'Console',date:new Date().toISOString().split('T')[0],expires:'7 jours',by:'Console'});addConsoleLine('err',`🚫 ${p.name} banni`);renderBans();renderPlayers();}else addConsoleLine('err',`Introuvable: ${parts[1]}`); }
+    else if(cmd==='unban'&&parts[1]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); if(p){p.status='Offline';const idx=bans.findIndex(b=>b.name===p.name);if(idx>-1)bans.splice(idx,1);addConsoleLine('ok',`✅ ${p.name} débanni`);renderBans();renderPlayers();}else addConsoleLine('err',`Introuvable: ${parts[1]}`); }
+    else if(cmd==='kick'&&parts[1]){ addConsoleLine('warn',`👢 ${parts[1]} expulsé`); }
+    else if(cmd==='warn'&&parts[1]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); if(p){p.warns++;addConsoleLine('warn',`⚠️ ${p.name} averti (${p.warns} warns)`);renderPlayers();}else addConsoleLine('err',`Introuvable: ${parts[1]}`); }
+    else if(cmd==='give'&&parts[1]&&parts[2]){ const p=players.find(x=>x.name.toLowerCase()===parts[1].toLowerCase()); const amt=parseInt(parts[2]); if(p&&amt>0){p.coins+=amt;addConsoleLine('ok',`💰 +${amt} → ${p.name}`);renderEcoPlayer();}else addConsoleLine('err','Joueur ou montant invalide'); }
+    else if(cmd==='announce'&&parts.length>1){ const msg=parts.slice(1).join(' '); announcements.unshift({title:'Console',msg,type:'info',target:'Tous',time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}); addConsoleLine('sys',`📢 "${msg}"`); renderAnnHistory(); }
+    else addConsoleLine('err',`Commande inconnue: "${cmd}" — tapez "help"`);
+    inp.value=''; document.getElementById('console-body').scrollTop=9999;
+  } else if(e.key==='ArrowUp'){ if(consoleCursor>0){consoleCursor--;inp.value=consoleHistory[consoleCursor]||'';} e.preventDefault(); }
+  else if(e.key==='ArrowDown'){ consoleCursor<consoleHistory.length-1?inp.value=consoleHistory[++consoleCursor]||'':(consoleCursor=consoleHistory.length,inp.value=''); e.preventDefault(); }
+}
+
 function addConsoleLine(type,msg){ const body=document.getElementById('console-body'); if(!body) return; const now=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); const div=document.createElement('div'); div.className='clog'; div.innerHTML=`<span class="t">[${now}]</span><span class="${type}">${msg}</span>`; body.appendChild(div); body.scrollTop=body.scrollHeight; }
 function clearConsole(){ document.getElementById('console-body').innerHTML=''; }
 function consoleHelp(){ consoleCommands.help(); }
 
-function renderAnalyticsCharts(){ const days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim']; renderBar('chart-players','chart-labels',[180,210,195,247,230,260,247],days,'var(--blue)','joueurs'); renderBar('chart-revenue','chart-rev-labels',[320,420,380,510,445,600,520],days,'var(--green)','R$'); }
+function renderAnalyticsCharts(data){
+  const days=['Lun','Mar','Mer','Jeu','Ven','Sam','Auj'];
+  // Génère des valeurs réalistes autour du pic réel
+  const base = data?.playing || 100;
+  const visBase = data?.visits || 1000;
+  const factor = 0.7 + Math.random() * 0.3;
+  const playerData = days.map((_,i) => Math.max(1, Math.round(base * (0.6 + Math.sin(i*0.8+1)*0.3 + Math.random()*0.15))));
+  playerData[6] = base; // aujourd'hui = valeur réelle
+  const visitData = days.map((_,i) => Math.max(1, Math.round(visBase * (0.001 + Math.sin(i*0.7)*0.0005 + Math.random()*0.0003))));
+  renderBar('chart-players','chart-labels', playerData, days,'var(--blue)','joueurs');
+  renderBar('chart-revenue','chart-rev-labels', visitData, days,'var(--green)','visites');
+}
+
 function renderBar(chartId,labelId,data,labels,color,unit){ const chart=document.getElementById(chartId); if(!chart) return; const max=Math.max(...data); chart.innerHTML=data.map(v=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%"><div style="width:100%;display:flex;align-items:flex-end;justify-content:center;height:160px"><div title="${v} ${unit}" style="width:80%;border-radius:4px 4px 0 0;background:${color};opacity:.8;height:${Math.round(v/max*100)}%;min-height:4px;cursor:pointer" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.8'"></div></div></div>`).join(''); const lbl=document.getElementById(labelId); if(lbl) lbl.innerHTML=labels.map(d=>`<span>${d}</span>`).join(''); }
-function refreshAnalytics(){ renderAnalyticsCharts(); toast('Analytics actualisées','success',2000); }
+function refreshAnalytics(){ refreshRealData(); toast('Analytics actualisées','success',2000); }
 
 function doLogout(){ openModal('🚪 Déconnexion',`<p style="color:var(--text)">Êtes-vous sûr de vouloir vous déconnecter ?</p>`,`<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-danger" onclick="doLogoutConfirm()">🚪 Déconnecter</button>`); }
-function doLogoutConfirm(){ closeModal(); const ap=document.getElementById('admin-panel'); ap.style.opacity='0'; setTimeout(()=>{ ap.classList.remove('visible','fadein'); ap.style.opacity=''; ap.style.display='none'; gameData=null; creatorData=null; creatorGamesCache=[]; const lp=document.getElementById('login-page'); lp.style.display='flex'; lp.classList.remove('closing'); document.getElementById('inp-gameid').value=''; document.getElementById('inp-robloxname').value=''; document.getElementById('inp-pw').value=''; document.getElementById('login-btn').disabled=false; document.getElementById('login-btn').textContent='🔓 Accéder au Panel'; document.getElementById('login-error').classList.remove('show'); document.getElementById('game-preview').style.display='none'; document.getElementById('creator-section').style.display='none'; },400); }
+function doLogoutConfirm(){
+  closeModal();
+  if (realDataInterval) { clearInterval(realDataInterval); realDataInterval = null; }
+  const ap=document.getElementById('admin-panel');
+  ap.style.opacity='0';
+  setTimeout(()=>{
+    ap.classList.remove('visible','fadein'); ap.style.opacity=''; ap.style.display='none';
+    gameData=null; creatorData=null; creatorGamesCache=[];
+    const lp=document.getElementById('login-page');
+    lp.style.display='flex'; lp.classList.remove('closing');
+    document.getElementById('inp-gameid').value='';
+    document.getElementById('inp-robloxname').value='';
+    document.getElementById('inp-pw').value='';
+    document.getElementById('login-btn').disabled=false;
+    document.getElementById('login-btn').textContent='🔓 Accéder au Panel';
+    document.getElementById('login-error').classList.remove('show');
+    document.getElementById('game-preview').style.display='none';
+    document.getElementById('creator-section').style.display='none';
+  },400);
+}
 </script>
 </body>
 </html>
