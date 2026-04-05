@@ -725,21 +725,57 @@ async function rFetch(url) {
 }
 
 async function lookupUser(username) {
-  const res = await fetch(PROXY + encodeURIComponent('https://users.roblox.com/v1/usernames/users'), {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({usernames:[username], excludeBannedUsers:false})
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-  const user = data.data?.[0];
-  if (!user) throw new Error('Utilisateur introuvable');
+  let userId = null, userName = '', displayName = '';
+
+  // Méthode 1 : API search (GET, pas de CORS problem)
+  try {
+    const searchData = await rFetch(`https://users.roblox.com/v1/users/search?keyword=${encodeURIComponent(username)}&limit=10`);
+    const found = searchData.data?.find(u => u.name.toLowerCase() === username.toLowerCase());
+    if (found) {
+      userId = found.id;
+      userName = found.name;
+      displayName = found.displayName;
+    }
+  } catch(e) {}
+
+  // Méthode 2 : POST via proxy si méthode 1 échoue
+  if (!userId) {
+    try {
+      const res = await fetch(PROXY + encodeURIComponent('https://users.roblox.com/v1/usernames/users'), {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({usernames:[username], excludeBannedUsers:false})
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const u = data.data?.[0];
+        if (u) { userId = u.id; userName = u.name; displayName = u.displayName; }
+      }
+    } catch(e) {}
+  }
+
+  // Méthode 3 : profil public direct
+  if (!userId) {
+    try {
+      const profileData = await rFetch(`https://www.roblox.com/users/profile?username=${encodeURIComponent(username)}`);
+      if (profileData?.UserId) {
+        userId = profileData.UserId;
+        userName = profileData.Username || username;
+        displayName = profileData.DisplayName || userName;
+      }
+    } catch(e) {}
+  }
+
+  if (!userId) throw new Error('Utilisateur introuvable');
+
+  // Avatar headshot
   let avatarUrl = '';
   try {
-    const av = await rFetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=true`);
+    const av = await rFetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=true`);
     avatarUrl = av.data?.[0]?.imageUrl || '';
   } catch(e) {}
-  return { id: user.id, name: user.name, displayName: user.displayName, avatarUrl };
+
+  return { id: userId, name: userName, displayName: displayName || userName, avatarUrl };
 }
 
 async function fetchCreatorGames(userId) {
