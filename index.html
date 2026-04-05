@@ -725,13 +725,12 @@ async function rFetch(url) {
 }
 
 async function lookupUser(username) {
-  const json = await rFetch('https://users.roblox.com/v1/usernames/users');
-  // POST workaround via corsproxy
   const res = await fetch(PROXY + encodeURIComponent('https://users.roblox.com/v1/usernames/users'), {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({usernames:[username], excludeBannedUsers:false})
   });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   const user = data.data?.[0];
   if (!user) throw new Error('Utilisateur introuvable');
